@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/number_symbols_data.dart';
 
 import '../common/utils/calender.dart';
 import '../common/utils/customButton.dart';
 import '../common/utils/global_variable.dart';
 
-class Schedule extends StatelessWidget {
-  const Schedule({super.key});
+class Schedule extends StatefulWidget {
+  Schedule({super.key});
+
+  @override
+  State<Schedule> createState() => _ScheduleState();
+}
+
+class _ScheduleState extends State<Schedule> {
+  bool _hasBeenPressed = false;
+  var _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -81,17 +90,29 @@ class Schedule extends StatelessWidget {
                   mainAxisExtent: 40,
                   mainAxisSpacing: 25),
               itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  width: 150.w,
-                  height: 30.h,
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black38, width: 1),
-                      borderRadius: BorderRadius.all(Radius.circular(5))),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      "10:00 AM",
-                      style: TextStyle(color: AppColors.mainColorbutton),
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _hasBeenPressed = !_hasBeenPressed;
+                      _currentIndex = 0;
+                    });
+                  },
+                  child: Container(
+                    width: 150.w,
+                    height: 30.h,
+                    decoration: BoxDecoration(
+                        color: _hasBeenPressed ? Colors.white : Colors.black,
+                        border: Border.all(color: Colors.black38, width: 1),
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        "10:00 AM",
+                        style: TextStyle(
+                            color: _hasBeenPressed
+                                ? AppColors.mainColorbutton
+                                : Colors.white),
+                      ),
                     ),
                   ),
                 );

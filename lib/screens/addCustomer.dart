@@ -26,7 +26,9 @@ class _AddCustomerState extends State<AddCustomer> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+            },
             icon: Icon(
               Icons.arrow_back,
               color: Colors.blue,
@@ -182,9 +184,9 @@ class _AddCustomerState extends State<AddCustomer> {
             Row(
               children: [
                 Expanded(
-                  child: CustomButton(
+                  child: CustomButtonOutline(
                     onPressed: () {},
-                    text: "Save",
+                    text: "Reset",
                   ),
                 ),
                 SizedBox(

@@ -3,7 +3,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 class PatientsComponent extends StatelessWidget {
-  const PatientsComponent({super.key});
+  final String img;
+  final String title;
+  final String number;
+  final String day;
+
+  const PatientsComponent(
+      {super.key,
+      required this.img,
+      required this.title,
+      required this.number,
+      required this.day});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +21,7 @@ class PatientsComponent extends StatelessWidget {
       children: [
         Container(
           width: 100.w,
-          height: 200.h,
+          height: 180.h,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(10)),
               boxShadow: kElevationToShadow[2],
@@ -24,21 +34,21 @@ class PatientsComponent extends StatelessWidget {
                 Align(
                   alignment: Alignment.center,
                   child: SvgPicture.asset(
-                    "assets/icons/second_container.svg",
-                    height: 123.h,
-                    width: 123.w,
+                    img,
+                    height: 100.h,
+                    width: 100.w,
                   ),
                 ),
                 Text(
-                  "Total Patients",
+                  title,
                   style:
-                      TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500),
+                      TextStyle(fontSize: 10.sp, fontWeight: FontWeight.w500),
                 ),
                 SizedBox(
                   height: 10.h,
                 ),
                 Text(
-                  "1500",
+                  number,
                   style:
                       TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
                 ),
@@ -46,7 +56,7 @@ class PatientsComponent extends StatelessWidget {
                   height: 10.h,
                 ),
                 Text(
-                  "Till Today",
+                  day,
                   style:
                       TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w500),
                 )

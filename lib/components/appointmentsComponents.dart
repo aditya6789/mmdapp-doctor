@@ -41,15 +41,18 @@ class Appointment extends StatelessWidget {
                 SizedBox(
                   height: 10.h,
                 ),
-                Container(
-                  width: 80.w,
-                  height: 20.h,
-                  color: Colors.green,
-                  child: Center(
-                      child: Text(
-                    "Confirmed",
-                    style: TextStyle(color: Colors.white),
-                  )),
+                GestureDetector(
+                  onTap: (){},
+                  child: Container(
+                    width: 80.w,
+                    height: 20.h,
+                    color: Colors.green,
+                    child: Center(
+                        child: Text(
+                      "Confirmed",
+                      style: TextStyle(color: Colors.white, fontSize: 11.sp),
+                    )),
+                  ),
                 )
               ],
             )

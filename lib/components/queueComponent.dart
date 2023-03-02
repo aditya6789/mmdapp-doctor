@@ -3,7 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 class QueueComponent extends StatelessWidget {
-  const QueueComponent({super.key});
+  final String title;
+  final String img;
+
+  const QueueComponent({super.key, required this.title, required this.img});
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +27,9 @@ class QueueComponent extends StatelessWidget {
                 child: SizedBox(
                     width: 100.w,
                     child: Text(
-                      "Add Customer to Queue",
+                      title,
                       style: TextStyle(
-                          fontSize: 13.sp, fontWeight: FontWeight.w600),
+                          fontSize: 12.sp, fontWeight: FontWeight.w600),
                     )),
               )),
         ),
@@ -40,7 +43,7 @@ class QueueComponent extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(10)),
             ),
             child: SvgPicture.asset(
-              'assets/icons/second_container.svg',
+              img,
               height: 50.h,
               width: 50.w,
             ),

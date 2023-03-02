@@ -2,7 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TodayComponent extends StatelessWidget {
-  const TodayComponent({super.key});
+  final String name;
+  final String type;
+  final String time;
+  final String date;
+
+  const TodayComponent(
+      {super.key,
+      required this.name,
+      required this.type,
+      required this.time,
+      required this.date});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +25,7 @@ class TodayComponent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "13/01/2022",
+                  date,
                   style: TextStyle(
                     fontSize: 11.sp,
                   ),
@@ -24,7 +34,7 @@ class TodayComponent extends StatelessWidget {
                   height: 10.h,
                 ),
                 Text(
-                  "Suguna M",
+                  name,
                   style:
                       TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600),
                 ),
@@ -34,7 +44,7 @@ class TodayComponent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  "@10:00AM",
+                  time,
                   style: TextStyle(
                     fontSize: 11.sp,
                   ),
@@ -43,7 +53,7 @@ class TodayComponent extends StatelessWidget {
                   height: 10.h,
                 ),
                 Text(
-                  "New Patient",
+                  type,
                   style: TextStyle(
                     fontSize: 12.sp,
                   ),

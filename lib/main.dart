@@ -37,7 +37,9 @@ class MyApp extends StatelessWidget {
                 child: Image.asset("assets/logo.png"),
               ),
               duration: 3000,
-              nextScreen: LandingScreen(subRoute: 'home'))),
+              nextScreen: LandingScreen(
+                subRoute: 'home',
+              ))),
     );
   }
 }

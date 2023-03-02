@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 class DateTextFormField extends StatefulWidget {
@@ -23,6 +24,7 @@ class _DateTextFormFieldState extends State<DateTextFormField> {
       controller: dateInput,
       decoration: InputDecoration(
           suffixIcon: Icon(Icons.macro_off),
+          hintStyle: TextStyle(fontSize: 11.sp),
           hintText:
               "${DateFormat('dd/MM/yyyy').format(DateTime.now())} (Current Date)"),
       onTap: () async {
@@ -59,6 +61,7 @@ class CustomTextFormField extends StatelessWidget {
       controller: controller,
       decoration: InputDecoration(
         hintText: "Enter",
+        hintStyle: TextStyle(fontSize: 11.sp),
       ),
     );
   }
@@ -86,6 +89,7 @@ class _BirthTextFormFieldState extends State<BirthTextFormField> {
       controller: birthInput,
       decoration: InputDecoration(
         hintText: "dd/mm/yyyy",
+        hintStyle: TextStyle(fontSize: 11.sp),
         suffixIcon: Icon(Icons.macro_off),
       ),
       onTap: () async {
