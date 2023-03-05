@@ -86,7 +86,13 @@ class Prescription extends StatelessWidget {
 }
 
 class AddPrescription extends StatelessWidget {
-  const AddPrescription({super.key});
+   AddPrescription({super.key});
+TextEditingController dateController = TextEditingController();
+TextEditingController customerName = TextEditingController();
+TextEditingController visitController = TextEditingController();
+TextEditingController medicine = TextEditingController();
+TextEditingController  intake= TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +109,9 @@ class AddPrescription extends StatelessWidget {
             SizedBox(
               height: 10.h,
             ),
-            DateTextFormField(),
+            DateTextFormField(
+              controller: dateController,
+            ),
           ],
         ),
         SizedBox(
@@ -119,7 +127,10 @@ class AddPrescription extends StatelessWidget {
             SizedBox(
               height: 10.h,
             ),
-            CustomTextFormField(),
+            CustomTextFormField(
+              controller: customerName,
+              
+            ),
           ],
         ),
         SizedBox(
@@ -135,7 +146,9 @@ class AddPrescription extends StatelessWidget {
             SizedBox(
               height: 10.h,
             ),
-            CustomTextFormField(),
+            CustomTextFormField(
+              controller: visitController,
+            ),
           ],
         ),
         SizedBox(
@@ -155,11 +168,15 @@ class AddPrescription extends StatelessWidget {
                   SizedBox(
                     height: 10.h,
                   ),
-                  CustomTextFormField(),
+                  CustomTextFormField(
+                    controller: medicine,
+                  ),
                   SizedBox(
                     height: 10.h,
                   ),
-                  CustomTextFormField(),
+                  CustomTextFormField(
+                    controller: medicine,
+                  ),
                 ],
               ),
             ),
@@ -178,11 +195,15 @@ class AddPrescription extends StatelessWidget {
                   SizedBox(
                     height: 10.h,
                   ),
-                  CustomTextFormField(),
+                  CustomTextFormField(
+                    controller: intake,
+                  ),
                   SizedBox(
                     height: 10.h,
                   ),
-                  CustomTextFormField(),
+                  CustomTextFormField(
+                    controller: intake,
+                  ),
                 ],
               ),
             ),

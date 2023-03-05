@@ -7,6 +7,7 @@ import 'package:mmdapp_doctor/screens/CustomerDetails.dart';
 import 'package:mmdapp_doctor/screens/CustomerQueueScreen.dart';
 import 'package:mmdapp_doctor/screens/addCustomer.dart';
 import 'package:mmdapp_doctor/screens/customers.dart';
+import 'package:mmdapp_doctor/screens/daySchedule.dart';
 import 'package:mmdapp_doctor/screens/homeScreen.dart';
 import 'package:mmdapp_doctor/screens/schedule.dart';
 
@@ -37,9 +38,7 @@ class MyApp extends StatelessWidget {
                 child: Image.asset("assets/logo.png"),
               ),
               duration: 3000,
-              nextScreen: LandingScreen(
-                subRoute: 'home',
-              ))),
+              nextScreen: DaySchedule())),
     );
   }
 }

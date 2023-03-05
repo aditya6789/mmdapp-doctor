@@ -11,6 +11,10 @@ class AddScheduleScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController fromDate = TextEditingController();
+    TextEditingController toDate = TextEditingController();
+    TextEditingController timeController = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -42,7 +46,9 @@ class AddScheduleScreen extends StatelessWidget {
                           'From Date',
                           style: TextStyle(fontSize: 13.sp),
                         ),
-                        BirthTextFormField(),
+                        BirthTextFormField(
+                          controller: fromDate,
+                        ),
                       ],
                     ),
                   ),
@@ -57,7 +63,9 @@ class AddScheduleScreen extends StatelessWidget {
                           'From Date',
                           style: TextStyle(fontSize: 13.sp),
                         ),
-                        BirthTextFormField(),
+                        BirthTextFormField(
+                          controller: toDate,
+                        ),
                       ],
                     ),
                   )
@@ -86,7 +94,9 @@ class AddScheduleScreen extends StatelessWidget {
                           'Start Time',
                           style: TextStyle(fontSize: 13.sp),
                         ),
-                        BirthTextFormField(),
+                        TimeTextFormField(
+                          controller: timeController,
+                        ),
                       ],
                     ),
                   ),
@@ -101,7 +111,9 @@ class AddScheduleScreen extends StatelessWidget {
                           'End Time',
                           style: TextStyle(fontSize: 13.sp),
                         ),
-                        BirthTextFormField(),
+                        TimeTextFormField(
+                          controller: timeController,
+                        ),
                       ],
                     ),
                   ),
@@ -121,7 +133,9 @@ class AddScheduleScreen extends StatelessWidget {
                           'Start Time',
                           style: TextStyle(fontSize: 13.sp),
                         ),
-                        BirthTextFormField(),
+                        TimeTextFormField(
+                          controller: timeController,
+                        ),
                       ],
                     ),
                   ),
@@ -136,7 +150,9 @@ class AddScheduleScreen extends StatelessWidget {
                           'End Time',
                           style: TextStyle(fontSize: 13.sp),
                         ),
-                        BirthTextFormField(),
+                        TimeTextFormField(
+                          controller: timeController,
+                        ),
                       ],
                     ),
                   ),
@@ -156,7 +172,9 @@ class AddScheduleScreen extends StatelessWidget {
                           'Start Time',
                           style: TextStyle(fontSize: 13.sp),
                         ),
-                        BirthTextFormField(),
+                        TimeTextFormField(
+                          controller: timeController,
+                        ),
                       ],
                     ),
                   ),
@@ -171,7 +189,9 @@ class AddScheduleScreen extends StatelessWidget {
                           'End Time',
                           style: TextStyle(fontSize: 13.sp),
                         ),
-                        BirthTextFormField(),
+                        TimeTextFormField(
+                          controller: timeController,
+                        ),
                       ],
                     ),
                   ),
@@ -191,7 +211,9 @@ class AddScheduleScreen extends StatelessWidget {
                           'Start Time',
                           style: TextStyle(fontSize: 13.sp),
                         ),
-                        BirthTextFormField(),
+                        TimeTextFormField(
+                          controller: timeController,
+                        ),
                       ],
                     ),
                   ),
@@ -206,7 +228,9 @@ class AddScheduleScreen extends StatelessWidget {
                           'End Time',
                           style: TextStyle(fontSize: 13.sp),
                         ),
-                        BirthTextFormField(),
+                        TimeTextFormField(
+                          controller: timeController,
+                        ),
                       ],
                     ),
                   ),
@@ -226,7 +250,9 @@ class AddScheduleScreen extends StatelessWidget {
                           'Start Time',
                           style: TextStyle(fontSize: 13.sp),
                         ),
-                        BirthTextFormField(),
+                        TimeTextFormField(
+                          controller: timeController,
+                        ),
                       ],
                     ),
                   ),
@@ -241,7 +267,9 @@ class AddScheduleScreen extends StatelessWidget {
                           'End Time',
                           style: TextStyle(fontSize: 13.sp),
                         ),
-                        BirthTextFormField(),
+                        TimeTextFormField(
+                          controller: timeController,
+                        ),
                       ],
                     ),
                   ),

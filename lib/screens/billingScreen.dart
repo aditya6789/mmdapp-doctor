@@ -12,6 +12,12 @@ class BillingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController dateController = TextEditingController();
+    TextEditingController nameController = TextEditingController();
+    TextEditingController phoneController = TextEditingController();
+    TextEditingController emailController = TextEditingController();
+    TextEditingController addressController = TextEditingController();
+    TextEditingController chargesController = TextEditingController();
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -70,7 +76,9 @@ class BillingScreen extends StatelessWidget {
                       SizedBox(
                         height: 5.h,
                       ),
-                      BirthTextFormField(),
+                      BirthTextFormField(
+                        controller: dateController,
+                      ),
                     ],
                   ),
                   SizedBox(
@@ -87,7 +95,9 @@ class BillingScreen extends StatelessWidget {
                       SizedBox(
                         height: 5.h,
                       ),
-                      CustomTextFormField(),
+                      CustomTextFormField(
+                        controller: nameController,
+                      ),
                     ],
                   ),
                   SizedBox(
@@ -108,7 +118,9 @@ class BillingScreen extends StatelessWidget {
                       SizedBox(
                         height: 5.h,
                       ),
-                      CustomTextFormField(),
+                      CustomTextFormField(
+                        controller: phoneController,
+                      ),
                     ],
                   ),
                   SizedBox(
@@ -125,7 +137,9 @@ class BillingScreen extends StatelessWidget {
                       SizedBox(
                         height: 5.h,
                       ),
-                      DateTextFormField(),
+                      DateTextFormField(
+                        controller: dateController,
+                      ),
                     ],
                   ),
                   SizedBox(
@@ -142,7 +156,9 @@ class BillingScreen extends StatelessWidget {
                       SizedBox(
                         height: 5.h,
                       ),
-                      CustomTextFormField(),
+                      CustomTextFormField(
+                        controller: chargesController,
+                      ),
                     ],
                   ),
                   SizedBox(

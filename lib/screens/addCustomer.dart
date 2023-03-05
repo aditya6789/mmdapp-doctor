@@ -23,6 +23,15 @@ class _AddCustomerState extends State<AddCustomer> {
 
   @override
   Widget build(BuildContext context) {
+ TextEditingController dateController = TextEditingController();
+    TextEditingController nameController = TextEditingController();
+    TextEditingController phoneController = TextEditingController();
+    TextEditingController emailController = TextEditingController();
+    TextEditingController addressController = TextEditingController();
+    TextEditingController notecontroller = TextEditingController();
+
+
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -44,44 +53,7 @@ class _AddCustomerState extends State<AddCustomer> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            // Container(
-            //   height: 60,
-            //   decoration: BoxDecoration(
-            //       border:
-            //           Border(bottom: BorderSide(color: Colors.black, width: 2))),
-            //   child: Row(
-            //     children: [
-            //       Expanded(
-            //           child: TextFormField(
-            //         controller: dateInput,
-            //         decoration:
-            //             InputDecoration(suffixIcon: Icon(Icons.macro_off)),
-            //         onTap: () async {
-            //           DateTime? pickedDate = await showDatePicker(
-            //               context: context,
-            //               initialDate: DateTime.now(),
-            //               firstDate: DateTime(1950),
-            //               //DateTime.now() - not to allow to choose before today.
-            //               lastDate: DateTime(2100));
-
-            //           if (pickedDate != null) {
-            //             print(
-            //                 pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-            //             String formattedDate =
-            //                 DateFormat('yyyy-MM-dd').format(pickedDate);
-            //             print(
-            //                 formattedDate); //formatted date output using intl package =>  2021-03-16
-            //             setState(() {
-            //               dateInput.text =
-            //                   formattedDate; //set output date to TextField value.
-            //             });
-            //           } else {}
-            //         },
-            //       )),
-            //     ],
-            //   ),
-            // )
-
+         
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -90,7 +62,9 @@ class _AddCustomerState extends State<AddCustomer> {
                   style:
                       TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
                 ),
-                DateTextFormField(),
+                DateTextFormField(
+                  controller: dateController,
+                ),
               ],
             ),
             SizedBox(
@@ -104,7 +78,9 @@ class _AddCustomerState extends State<AddCustomer> {
                   style:
                       TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
                 ),
-                CustomTextFormField(),
+                CustomTextFormField(
+                  controller: nameController,
+                ),
               ],
             ),
             SizedBox(
@@ -118,7 +94,7 @@ class _AddCustomerState extends State<AddCustomer> {
                   style:
                       TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
                 ),
-                CustomTextFormField(),
+                CustomTextFormField(controller: phoneController,),
               ],
             ),
             SizedBox(
@@ -132,7 +108,9 @@ class _AddCustomerState extends State<AddCustomer> {
                   style:
                       TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
                 ),
-                CustomTextFormField(),
+                CustomTextFormField(
+                  controller: emailController,
+                ),
               ],
             ),
             SizedBox(
@@ -146,7 +124,9 @@ class _AddCustomerState extends State<AddCustomer> {
                   style:
                       TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
                 ),
-                BirthTextFormField(),
+                BirthTextFormField(
+                  controller: dateController,
+                ),
               ],
             ),
             SizedBox(
@@ -160,7 +140,9 @@ class _AddCustomerState extends State<AddCustomer> {
                   style:
                       TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
                 ),
-                CustomTextFormField(),
+                CustomTextFormField(
+                  controller: addressController,
+                ),
               ],
             ),
             SizedBox(
@@ -174,7 +156,9 @@ class _AddCustomerState extends State<AddCustomer> {
                   style:
                       TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
                 ),
-                CustomTextFormField(),
+                CustomTextFormField(
+                  controller:notecontroller ,
+                ),
               ],
             ),
             SizedBox(

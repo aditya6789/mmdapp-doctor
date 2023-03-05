@@ -3,27 +3,26 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 class DateTextFormField extends StatefulWidget {
-  const DateTextFormField({super.key});
+  final TextEditingController controller;
+  const DateTextFormField({super.key, required this.controller});
 
   @override
   State<DateTextFormField> createState() => _DateTextFormFieldState();
 }
 
 class _DateTextFormFieldState extends State<DateTextFormField> {
-  TextEditingController dateInput = TextEditingController();
-
   @override
   void initState() {
-    dateInput.text = ""; //set the initial value of text field
+    widget.controller.text = ""; //set the initial value of text field
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: dateInput,
+      controller: widget.controller,
       decoration: InputDecoration(
-          suffixIcon: Icon(Icons.macro_off),
+          suffixIcon: Icon(Icons.calendar_month_rounded),
           hintStyle: TextStyle(fontSize: 11.sp),
           hintText:
               "${DateFormat('dd/MM/yyyy').format(DateTime.now())} (Current Date)"),
@@ -42,7 +41,7 @@ class _DateTextFormFieldState extends State<DateTextFormField> {
           print(
               formattedDate); //formatted date output using intl package =>  2021-03-16
           setState(() {
-            dateInput.text =
+            widget.controller.text =
                 formattedDate; //set output date to TextField value.
           });
         } else {}
@@ -52,11 +51,12 @@ class _DateTextFormFieldState extends State<DateTextFormField> {
 }
 
 class CustomTextFormField extends StatelessWidget {
-  const CustomTextFormField({super.key});
+  final TextEditingController controller;
+
+  CustomTextFormField({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController controller = TextEditingController();
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
@@ -68,7 +68,9 @@ class CustomTextFormField extends StatelessWidget {
 }
 
 class BirthTextFormField extends StatefulWidget {
-  const BirthTextFormField({super.key});
+  final TextEditingController controller;
+
+  BirthTextFormField({super.key, required this.controller});
 
   @override
   State<BirthTextFormField> createState() => _BirthTextFormFieldState();
@@ -79,18 +81,18 @@ class _BirthTextFormFieldState extends State<BirthTextFormField> {
 
   @override
   void initState() {
-    birthInput.text = ""; //set the initial value of text field
+    widget.controller.text = ""; //set the initial value of text field
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: birthInput,
+      controller: widget.controller,
       decoration: InputDecoration(
         hintText: "dd/mm/yyyy",
         hintStyle: TextStyle(fontSize: 11.sp),
-        suffixIcon: Icon(Icons.macro_off),
+        suffixIcon: Icon(Icons.calendar_month_rounded),
       ),
       onTap: () async {
         DateTime? pickedDate = await showDatePicker(
@@ -107,10 +109,63 @@ class _BirthTextFormFieldState extends State<BirthTextFormField> {
           print(
               formattedDate); //formatted date output using intl package =>  2021-03-16
           setState(() {
-            birthInput.text =
+            widget.controller.text =
                 formattedDate; //set output date to TextField value.
           });
         } else {}
+      },
+    );
+  }
+}
+
+class TimeTextFormField extends StatefulWidget {
+  final TextEditingController controller;
+
+  TimeTextFormField({super.key, required this.controller});
+
+  @override
+  State<TimeTextFormField> createState() => _TimeTextFormFieldState();
+}
+
+class _TimeTextFormFieldState extends State<TimeTextFormField> {
+  @override
+  void initState() {
+    widget.controller.text = ""; //set the initial value of text field
+    super.initState();
+  }
+
+  TimeOfDay _currentTime = TimeOfDay.now();
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: widget.controller,
+      decoration: InputDecoration(
+        hintText: "hh:mm",
+        hintStyle: TextStyle(fontSize: 11.sp),
+        suffixIcon: Icon(Icons.lock_clock_sharp),
+      ),
+      onTap: () async {
+        TimeOfDay? pickedTime =
+            await showTimePicker(context: context, initialTime: _currentTime);
+
+        if (pickedTime != null) {
+          print(pickedTime.format(context)); //output 10:51 PM
+          DateTime parsedTime =
+              DateFormat.jm().parse(pickedTime.format(context).toString());
+          //converting to DateTime so that we can further format on different pattern.
+          print(parsedTime); //output 1970-01-01 22:53:00.000
+          String formattedTime = DateFormat('HH:mm').format(parsedTime);
+          print(formattedTime); //output 14:59:00
+          //DateFormat() is from intl package, you can format the time on any pattern you need.
+
+          setState(() {
+            widget.controller.text =
+                formattedTime; //set the value of text field.
+          });
+        } else {
+          print("Time is not selected");
+        }
       },
     );
   }
