@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mmdapp_doctor/common/utils/global_variable.dart';
-import 'package:mmdapp_doctor/services/auth/doctorService.dart';
+import 'package:mmdapp_doctor/services/auth/doctorServices.dart';
 
 import '../common/utils/customButton.dart';
 import '../common/utils/otpFormWidget.dart';
@@ -10,7 +10,6 @@ import '../common/utils/otpFormWidget.dart';
 class CustomerDetails extends StatefulWidget {
   final String queueId;
   final String customerId;
-
   const CustomerDetails(
       {super.key, required this.queueId, required this.customerId});
 
@@ -165,7 +164,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                       height: 15.h,
                     ),
                     Text(
-                      "2 6thfloor 765jgj678 y58t989jh 6yh",
+                      "Apartment 1 Durga Park",
                       textDirection: TextDirection.ltr,
                       style: TextStyle(
                           fontSize: 12.h, fontWeight: FontWeight.w500),

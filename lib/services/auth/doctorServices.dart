@@ -2,9 +2,10 @@ import 'package:http/http.dart';
 import 'package:mmdapp_doctor/services/urlconstants.dart' as UrlConsts;
 import 'package:mmdapp_doctor/utils/api_utils.dart';
 
-Future<Map<String, dynamic>> getQueueCustomers() async {
+Future<Map<String, dynamic>> getQueueCustomers({String query = ''}) async {
   try {
-    Response data = await getApi(UrlConsts.GET_QUEUE, {});
+    Response data =
+        await getApi((UrlConsts.GET_QUEUE + "searchText=${query}"), {});
     Map<String, dynamic> body = decodeBody(data.body);
     if (body.containsKey("records")) {
       return {
@@ -43,11 +44,14 @@ Future<Map<String, dynamic>> addNewCustomerQueue(Map userData) async {
   try {
     Response data = await postApi(UrlConsts.ADD_QUEUE, userData, {});
     var body = decodeBody(data.body);
+
     if (body == true) {
       return {"success": true};
     }
-    return {"success": false};
+    return {"success": false, 'body': body, "error": true};
   } catch (e) {
+    print("error");
+    print(e);
     return {'success': false, 'message': "Something Went Wrong"};
   }
 }
@@ -128,9 +132,12 @@ Future<Map<String, dynamic>> getCustomerDetail(int customer_id) async {
 Future<Map<String, dynamic>> createPrescription(Map prescription_data) async {
   try {
     Response data = await postApi('/api/prescription/', prescription_data, {});
+
     var body = decodeBody(data.body);
+    print(data);
+    print(body);
     if (data.statusCode == 200) {
-      return {"success": true, 'customer_status': body['status']};
+      return {"success": true};
     }
     return {"success": false};
   } catch (e) {

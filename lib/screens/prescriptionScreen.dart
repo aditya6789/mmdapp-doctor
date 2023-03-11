@@ -29,7 +29,7 @@ class PrescriptionScreen extends StatelessWidget {
           ),
           bottom: TabBar(
               unselectedLabelColor: Colors.black,
-               labelColor: AppColors.mainColorbutton,
+              labelColor: AppColors.mainColorbutton,
               indicatorColor: AppColors.mainColorbutton,
               indicatorSize: TabBarIndicatorSize.label,
               tabs: [
@@ -68,7 +68,7 @@ class PrescriptionScreen extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(20),
-            child: AddPrescription(),
+            child: PrescriptionComponent(),
           ),
         ]),
       ),

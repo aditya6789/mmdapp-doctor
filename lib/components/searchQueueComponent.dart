@@ -42,8 +42,8 @@ class MySearchDelegate extends SearchDelegate<Map> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return FutureBuilder<List<dynamic>>(
-      future: getCustomers(query),
+    return FutureBuilder<Map<String, dynamic>>(
+      future: getQueueCustomers(query: query),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
@@ -52,40 +52,48 @@ class MySearchDelegate extends SearchDelegate<Map> {
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return Center(child: Text('No suggestions found'));
         } else {
-          return ListView.builder(
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) {
-              final suggestion = snapshot.data![index];
-              return ListTile(
-                leading: Icon(Icons.person_2_rounded),
-                title: Text(
-                  suggestion['first_name'] == ''
-                      ? 'No Name'
-                      : suggestion['first_name'],
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                onTap: () {
-                  print("called");
-                  close(context, suggestion);
-                },
-              );
-            },
-          );
+          if (snapshot.data!.containsKey('data')) {
+            List<dynamic> records = snapshot.data!['data'];
+
+            print(records);
+
+            return ListView.builder(
+              itemCount: records.length,
+              itemBuilder: (context, index) {
+                final suggestion = records[index];
+                return ListTile(
+                  leading: Icon(Icons.person_2_rounded),
+                  title: Text(
+                    suggestion['customer_name'] == ''
+                        ? 'No Name'
+                        : suggestion['customer_name'],
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  onTap: () {
+                    print("called");
+                    close(context, suggestion);
+                  },
+                );
+              },
+            );
+          } else {
+            return Center(child: Text('No suggestions found 2'));
+          }
         }
       },
     );
   }
 }
 
-class SearchCustomer extends StatefulWidget {
+class SearchQueue extends StatefulWidget {
   final TextEditingController controller;
-  const SearchCustomer({required this.controller});
+  const SearchQueue({required this.controller});
 
   @override
-  State<SearchCustomer> createState() => _SearchCustomerState();
+  State<SearchQueue> createState() => _SearchQueueState();
 }
 
-class _SearchCustomerState extends State<SearchCustomer> {
+class _SearchQueueState extends State<SearchQueue> {
   final TextEditingController controller = TextEditingController();
 
   @override
@@ -118,9 +126,8 @@ class _SearchCustomerState extends State<SearchCustomer> {
                   );
 
                   if (result != null) {
-                    widget.controller.text =
-                        result['id'].toString() ?? 'Not Selected';
-                    controller.text = result['first_name'] ?? 'Not Selected';
+                    widget.controller.text = result['id'].toString() ?? '';
+                    controller.text = result['customer_name'] ?? "";
                   }
                 },
                 onTap: () async {
@@ -130,9 +137,8 @@ class _SearchCustomerState extends State<SearchCustomer> {
                   );
 
                   if (result != null) {
-                    widget.controller.text =
-                        result['id'].toString() ?? 'Not Selected';
-                    controller.text = result['first_name'] ?? 'Not Selected';
+                    widget.controller.text = result['id'].toString() ?? '';
+                    controller.text = result['customer_name'] ?? '';
                   }
                 },
               ),

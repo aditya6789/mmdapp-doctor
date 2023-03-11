@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mmdapp_doctor/components/searchCustomerComponent.dart';
+import 'package:mmdapp_doctor/screens/homeScreen.dart';
+import 'package:mmdapp_doctor/services/auth/doctorServices.dart';
+import 'package:mmdapp_doctor/utils/customToasts.dart';
 
 import '../common/utils/TextFormField.dart';
 import '../common/utils/customButton.dart';
@@ -21,24 +26,69 @@ class _AddCustomerState extends State<AddCustomer> {
   TextEditingController email = TextEditingController();
   TextEditingController note = TextEditingController();
   TextEditingController address = TextEditingController();
-
+  TextEditingController userController = TextEditingController();
+  FToast fToast = FToast();
   @override
   void initState() {
     dateInput.text = ""; //set the initial value of text field
+
     super.initState();
+    // if you want to use context from globally instead of content we need to pass navigatorKey.currentContext!
+    fToast.init(context);
+    // if you want to use context from globally instead of content we need to pass navigatorKey.currentContext!
   }
 
   void submitHandler() async {
-    Map userData = {
-      "first_name": customer_name.value.text,
-      "email": email.value.text,
-      "mobile": mobile.value.text,
-      "address_line1": address.value.text,
-      "note": note.value.text,
-      "customer": null
-    };
+    int userId = int.tryParse(userController.value.text) ?? 0;
 
-    print(userData);
+    Map userData = {};
+    if (userId == 0) {
+      userData = {
+        "first_name": customer_name.value.text,
+        "email": email.value.text,
+        "mobile": mobile.value.text,
+        "address_line1": address.value.text,
+        "note": note.value.text,
+      };
+    } else {
+      userData = {
+        "first_name": customer_name.value.text,
+        "email": email.value.text,
+        "mobile": mobile.value.text,
+        "address_line1": address.value.text,
+        "note": note.value.text,
+        "customer": userController.value.text
+      };
+    }
+
+    Map resp = await addNewCustomerQueue(userData);
+    if (resp["success"]) {
+      Navigator.pushReplacementNamed(
+          context, '/landing/${HomeScreen.routeName}');
+
+      fToast.showToast(
+        child: successToast("Added Successfully Wrong"),
+        gravity: ToastGravity.BOTTOM,
+        toastDuration: Duration(seconds: 2),
+      );
+    } else {
+      if (resp.containsKey("body")) {
+        Map body = resp['body'];
+        if (body.containsKey("mobileExists")) {
+          fToast.showToast(
+            child: errorToast("Mobile No. Already Exists"),
+            gravity: ToastGravity.BOTTOM,
+            toastDuration: Duration(seconds: 2),
+          );
+        }
+      } else {
+        fToast.showToast(
+          child: errorToast("Something Went Wrong"),
+          gravity: ToastGravity.BOTTOM,
+          toastDuration: Duration(seconds: 2),
+        );
+      }
+    }
   }
 
   @override
@@ -64,7 +114,7 @@ class _AddCustomerState extends State<AddCustomer> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            SearchCustomer(controller: TextEditingController()),
+            SearchCustomer(controller: userController),
             SizedBox(
               height: 20.h,
             ),

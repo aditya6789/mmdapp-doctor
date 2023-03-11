@@ -50,8 +50,10 @@ class CustomerQueueScreen extends StatelessWidget {
                                       .customerDetails.value!.length,
                           itemBuilder: (context, index) {
                             return CustomerQueue(
-                              date: '3,Wed 2023'.toString(),
-                              time: "8:00PM".toString(),
+                              date: customerController
+                                  .customerDetails.value![index].date,
+                              time: customerController
+                                  .customerDetails.value![index].time,
                               name: customerController
                                   .customerDetails.value![index].name,
                               queueId: customerController

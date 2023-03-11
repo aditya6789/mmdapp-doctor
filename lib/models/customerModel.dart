@@ -20,9 +20,14 @@ class CustomerModel {
   factory CustomerModel.fromJson(Map<String, dynamic> json) {
     return CustomerModel(
       name: json['customer_name'],
-      time: '10:00AM',
-      date: "3,Wed 2022",
-      number: '3',
+      time: json['created_at']
+          .toString()
+          .split("T")[1]
+          .split(":")
+          .sublist(0, 2)
+          .join(':'),
+      date: json['created_at'].toString().split("T")[0],
+      number: json['mobile'].toString(),
       total: '3',
       queueId: json['id'].toString(),
       customerId: json['customer'].toString(),

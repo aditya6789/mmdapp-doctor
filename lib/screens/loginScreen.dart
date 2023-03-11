@@ -7,7 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mmdapp_doctor/common/utils/customButton.dart';
 import 'package:mmdapp_doctor/screens/homeScreen.dart';
 import 'package:mmdapp_doctor/screens/otp.dart';
-import 'package:mmdapp_doctor/services/auth/authService.dart';
+import 'package:mmdapp_doctor/services/auth/authServices.dart';
 import 'package:mmdapp_doctor/utils/api_utils.dart';
 import 'package:mmdapp_doctor/utils/storage.dart';
 import '../utils/global_variable.dart';
@@ -40,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void submitHandler(context) async {
     var number = int.tryParse(loginController.value.text) ?? 0;
-
+    print("sUBMITTING");
     Map resp = await loginSendOtp(number);
     if (resp['success'] == false) {
       // show toast error

@@ -174,7 +174,6 @@ class BillingScreen extends StatelessWidget {
                   itemBuilder: (context, index) => Invoice(
                       invoice: "87657",
                       date: "12/09/2023",
-                      category: "sohju",
                       name: "Aditya Paswan"),
                   separatorBuilder: (context, index) => SizedBox(
                         height: 10.h,

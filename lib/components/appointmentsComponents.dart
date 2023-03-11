@@ -1,16 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mmdapp_doctor/services/auth/appointmentServices.dart';
 
 import '../common/utils/global_variable.dart';
 
-class Appointment extends StatelessWidget {
+class Appointment extends StatefulWidget {
   final String date;
   final String time;
   final String name;
+  final String status;
+  final int id;
 
-  Appointment(
-      {super.key, required this.date, required this.time, required this.name});
+  Appointment({
+    super.key,
+    required this.date,
+    required this.time,
+    required this.name,
+    required this.status,
+    required this.id,
+  });
+
+  @override
+  State<Appointment> createState() => _AppointmentState();
+}
+
+class _AppointmentState extends State<Appointment> {
+  String updatedStatus = '';
+
+  void onStatusChange(String? value) {
+    int status = int.tryParse(value.toString()) ?? -1;
+    if (status == -1) {
+      return;
+    }
+
+    updateAppointment(widget.id.toString(), status).then((resp) {
+      if (resp['success']) {
+        updatedStatus = status.toString();
+        setState(() {
+          updatedStatus = status.toString();
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +54,11 @@ class Appointment extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(date, style: TextStyle(fontSize: 11.sp)),
+                Text(widget.date, style: TextStyle(fontSize: 11.sp)),
                 SizedBox(
                   height: 10.h,
                 ),
-                Text(name,
+                Text(widget.name,
                     style:
                         TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600))
               ],
@@ -34,31 +66,63 @@ class Appointment extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(time,
+                Text(widget.time,
                     style: TextStyle(
                       fontSize: 11.sp,
                     )),
                 SizedBox(
                   height: 10.h,
                 ),
-                GestureDetector(
-                  onTap: (){},
-                  child: Container(
-                    width: 80.w,
-                    height: 20.h,
-                    color: Colors.green,
-                    child: Center(
+                DropdownButton(
+                  items: [
+                    DropdownMenuItem(
+                      value: '0',
+                      child: Container(
                         child: Text(
-                      "Confirmed",
-                      style: TextStyle(color: Colors.white, fontSize: 11.sp),
-                    )),
-                  ),
+                          "Pending",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            color: Color.fromARGB(255, 247, 132, 8),
+                            borderRadius: BorderRadius.all(Radius.circular(4))),
+                      ),
+                    ),
+                    DropdownMenuItem(
+                      value: '1',
+                      child: Container(
+                        child: Text(
+                          "Confirm",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.all(Radius.circular(4))),
+                      ),
+                    ),
+                    DropdownMenuItem(
+                      value: '2',
+                      child: Container(
+                        child: Text(
+                          "Rejected",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.all(Radius.circular(4))),
+                      ),
+                    ),
+                  ],
+                  onChanged: onStatusChange,
+                  value: (updatedStatus == '') ? widget.status : updatedStatus,
                 )
               ],
             )
           ],
         ),
-        Divider(
+        const Divider(
           thickness: 2,
         )
       ],
@@ -66,13 +130,44 @@ class Appointment extends StatelessWidget {
   }
 }
 
-class UpcomingAppointment extends StatelessWidget {
+class UpcomingAppointment extends StatefulWidget {
   final String date;
   final String time;
+  final String status;
   final String name;
+  final int id;
 
-  UpcomingAppointment(
-      {super.key, required this.date, required this.time, required this.name});
+  UpcomingAppointment({
+    super.key,
+    required this.date,
+    required this.time,
+    required this.name,
+    required this.status,
+    required this.id,
+  });
+
+  @override
+  State<UpcomingAppointment> createState() => _UpcomingAppointmentState();
+}
+
+class _UpcomingAppointmentState extends State<UpcomingAppointment> {
+  String updatedStatus = '';
+
+  void onStatusChange(String? value) {
+    int status = int.tryParse(value.toString()) ?? -1;
+    if (status == -1) {
+      return;
+    }
+
+    updateAppointment(widget.id.toString(), status).then((resp) {
+      if (resp['success']) {
+        updatedStatus = status.toString();
+        setState(() {
+          updatedStatus = status.toString();
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,11 +179,11 @@ class UpcomingAppointment extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(date, style: TextStyle(fontSize: 11.sp)),
+                Text(widget.date, style: TextStyle(fontSize: 11.sp)),
                 SizedBox(
                   height: 10.h,
                 ),
-                Text(name,
+                Text(widget.name,
                     style:
                         TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600))
               ],
@@ -96,31 +191,63 @@ class UpcomingAppointment extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(time,
+                Text(widget.time,
                     style: TextStyle(
                       fontSize: 11.sp,
                     )),
                 SizedBox(
                   height: 10.h,
                 ),
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    width: 80.w,
-                    height: 20.h,
-                    color: Colors.green,
-                    child: Center(
+                DropdownButton(
+                  items: [
+                    DropdownMenuItem(
+                      value: '0',
+                      child: Container(
                         child: Text(
-                      "Confirmed",
-                      style: TextStyle(color: Colors.white),
-                    )),
-                  ),
+                          "Pending",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            color: Color.fromARGB(255, 247, 132, 8),
+                            borderRadius: BorderRadius.all(Radius.circular(4))),
+                      ),
+                    ),
+                    DropdownMenuItem(
+                      value: '1',
+                      child: Container(
+                        child: Text(
+                          "Confirm",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.all(Radius.circular(4))),
+                      ),
+                    ),
+                    DropdownMenuItem(
+                      value: '2',
+                      child: Container(
+                        child: Text(
+                          "Rejected",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.all(Radius.circular(4))),
+                      ),
+                    ),
+                  ],
+                  onChanged: onStatusChange,
+                  value: (updatedStatus == '') ? widget.status : updatedStatus,
                 )
               ],
             )
           ],
         ),
-        Divider(
+        const Divider(
           thickness: 2,
         )
       ],
@@ -130,13 +257,11 @@ class UpcomingAppointment extends StatelessWidget {
 
 class Invoice extends StatelessWidget {
   final String invoice;
-  final String category;
   final String name;
   final String date;
   const Invoice(
       {super.key,
       required this.invoice,
-      required this.category,
       required this.name,
       required this.date});
 

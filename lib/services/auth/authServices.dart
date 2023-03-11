@@ -15,6 +15,7 @@ Future<Map<String, dynamic>> loginSendOtp(int mobile) async {
       return {'success': body["success"], 'message': body["msg"]};
     }
   } catch (e) {
+    print(e);
     return {'success': false, 'message': "Something Went Wrong"};
   }
 }

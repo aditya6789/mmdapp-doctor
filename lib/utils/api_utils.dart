@@ -39,6 +39,8 @@ Future<http.Response> getApi(String route, Map<String, String>? headers) async {
 
 Future<http.Response> postApi(
     String route, Object? body, Map<String, String>? headers) async {
+  headers?["Content-Type"] = "application/json";
+
   var exceptUrls = [
     UrlConsts.VERIFY_OTP,
     UrlConsts.SEND_OTP,
@@ -47,7 +49,7 @@ Future<http.Response> postApi(
 
   if (exceptUrls.contains(route)) {
     var response = await http.post(Uri.parse(base_url + route),
-        body: body, headers: headers);
+        body: jsonEncode(body), headers: headers);
     return response;
   }
 
@@ -55,7 +57,7 @@ Future<http.Response> postApi(
   headers?["Authorization"] = "JWT ${authToken}";
 
   var response = await http.post(Uri.parse(base_url + route),
-      body: body, headers: headers);
+      body: jsonEncode(body), headers: headers);
 
   if (response.statusCode == 200 || response.statusCode == 201) {
     return response;
