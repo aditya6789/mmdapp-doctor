@@ -154,7 +154,6 @@ class _PrescriptionComponentState extends State<PrescriptionComponent> {
     void buildData() async {
       List medicines_data = [];
 
-      print("hey vbuilding");
       for (var i = 0; i < medicineList.length; i++) {
         var medicine = medicineList[i];
         String medicineName = medicine[0]['controller'].value.text;
@@ -168,11 +167,8 @@ class _PrescriptionComponentState extends State<PrescriptionComponent> {
         });
       }
 
-      print(queueIdCtl.value.text);
       int queueId = int.tryParse(queueIdCtl.value.text) ?? -1;
       String purposeOfVisit = (povCtl.value.text);
-      print("queue");
-      print(queueId);
       if (queueId == -1) {
         fToast.showToast(child: errorToast("Select Customer Again"));
       }

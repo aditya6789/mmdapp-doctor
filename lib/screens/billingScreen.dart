@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mmdapp_doctor/common/utils/TextFormField.dart';
 import 'package:mmdapp_doctor/common/utils/global_variable.dart';
+import 'package:mmdapp_doctor/components/searchCustomerComponent.dart';
 
 import '../common/utils/customButton.dart';
 import '../components/appointmentsComponents.dart';
@@ -79,21 +80,12 @@ class BillingScreen extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Customer Name",
-                        style: TextStyle(
-                            fontSize: 13.sp, fontWeight: FontWeight.w500),
-                      ),
+                      SearchCustomer(controller: TextEditingController()),
                       SizedBox(
                         height: 5.h,
                       ),
-                      CustomTextFormField(),
                     ],
                   ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  Wrap(children: [Icon(Icons.add), Text("Add New Customer")]),
                   SizedBox(
                     height: 20.h,
                   ),
@@ -125,7 +117,16 @@ class BillingScreen extends StatelessWidget {
                       SizedBox(
                         height: 5.h,
                       ),
-                      DateTextFormField(),
+                      TextField(
+                        controller: TextEditingController(
+                            text: DateTime.now()
+                                .toString()
+                                .split(' ')[0]
+                                .split('-')
+                                .reversed
+                                .join('/')),
+                        enabled: false,
+                      )
                     ],
                   ),
                   SizedBox(

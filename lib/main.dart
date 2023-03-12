@@ -11,6 +11,7 @@ import 'package:mmdapp_doctor/screens/addCustomer.dart';
 import 'package:mmdapp_doctor/screens/customers.dart';
 import 'package:mmdapp_doctor/screens/homeScreen.dart';
 import 'package:mmdapp_doctor/screens/loginScreen.dart';
+import 'package:mmdapp_doctor/screens/prescriptionScreen.dart';
 import 'package:mmdapp_doctor/screens/schedule.dart';
 
 void main() {
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
                   child: Text("Loading"),
                 ),
                 duration: 3000,
-                nextScreen: LoginScreen())),
+                nextScreen: PrescriptionScreen())),
       ),
       navigatorKey: navigatorKey,
       builder: FToastBuilder(),
