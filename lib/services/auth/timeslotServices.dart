@@ -34,8 +34,7 @@ Future<Map> addDateTimeSlots(req_data) async {
   try {
     Response data = await postApi(UrlConsts.ADD_DATE_TIMESLOTS, (req_data), {});
     Map body = decodeBody(data.body);
-    print('body');
-    print(body);
+
     if (data.statusCode == 200) {
       if (body.containsKey("msg")) {
         return {"msg": body['msg'], 'success': true};

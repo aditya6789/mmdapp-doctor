@@ -9,23 +9,32 @@ import 'package:mmdapp_doctor/utils/customToasts.dart';
 import 'package:mmdapp_doctor/utils/pdf/pdfapi.dart';
 import 'package:mmdapp_doctor/utils/pdf/pdfgenerateapi.dart';
 import '../common/utils/TextFormField.dart';
+import '../models/prescriptionModel.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
 import '../common/utils/global_variable.dart';
 
-class Prescription extends StatelessWidget {
+class Prescription extends StatefulWidget {
   // final String prescription;
   // final String category;
   final String name;
   final String date;
+  final PrescriptionModel presc;
+
   const Prescription(
       {super.key,
       // required this.prescription,
       // required this.category,
       required this.name,
-      required this.date});
+      required this.date,
+      required this.presc});
 
+  @override
+  State<Prescription> createState() => _PrescriptionState();
+}
+
+class _PrescriptionState extends State<Prescription> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -40,7 +49,7 @@ class Prescription extends StatelessWidget {
               style: TextStyle(color: AppColors.darkTextColor, fontSize: 11.sp),
             ),
             Text(
-              date,
+              widget.date,
               style: TextStyle(color: AppColors.darkTextColor, fontSize: 11.sp),
             ),
           ],
@@ -52,7 +61,7 @@ class Prescription extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "${name}",
+              "${widget.name}",
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 13.sp,
@@ -80,7 +89,7 @@ class Prescription extends StatelessWidget {
                 ],
               ),
               onTap: () async {
-                final pdfFile = await PdfInvoiceApi.generate();
+                final pdfFile = await PdfInvoiceApi.generate(widget.presc);
                 PdfApi.openFile(pdfFile);
               },
             )
@@ -107,6 +116,9 @@ class PrescriptionComponent extends StatefulWidget {
 
 class _PrescriptionComponentState extends State<PrescriptionComponent> {
   FToast fToast = FToast();
+  TextEditingController queueIdCtl = TextEditingController();
+  TextEditingController povCtl = TextEditingController();
+  ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
@@ -130,9 +142,6 @@ class _PrescriptionComponentState extends State<PrescriptionComponent> {
   ];
   @override
   Widget build(BuildContext context) {
-    TextEditingController queueIdCtl = TextEditingController();
-    TextEditingController povCtl = TextEditingController();
-
     void addRow() {
       var len = medicineList.length;
       medicineList.add([
@@ -146,19 +155,29 @@ class _PrescriptionComponentState extends State<PrescriptionComponent> {
         },
       ]);
 
-      setState(() {
-        medicineList = medicineList;
-      });
+      // Scroll to bottom
+      scrollController.animateTo(
+        scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeOut,
+      );
+      medicineList = medicineList;
+      setState(() {});
     }
 
     void buildData() async {
       List medicines_data = [];
 
-      print("hey vbuilding");
       for (var i = 0; i < medicineList.length; i++) {
         var medicine = medicineList[i];
         String medicineName = medicine[0]['controller'].value.text;
         String medicineNote = medicine[1]['controller'].value.text;
+
+        // check if medicine name is empty and medicine note is empty
+        if (medicineName.trim() == '' && medicineNote.trim() == '') {
+          continue;
+        }
+
         medicines_data.add({
           "idx": i,
           "note": medicineNote,
@@ -168,11 +187,8 @@ class _PrescriptionComponentState extends State<PrescriptionComponent> {
         });
       }
 
-      print(queueIdCtl.value.text);
       int queueId = int.tryParse(queueIdCtl.value.text) ?? -1;
       String purposeOfVisit = (povCtl.value.text);
-      print("queue");
-      print(queueId);
       if (queueId == -1) {
         fToast.showToast(child: errorToast("Select Customer Again"));
       }
@@ -192,19 +208,20 @@ class _PrescriptionComponentState extends State<PrescriptionComponent> {
         fToast.showToast(
           child: successToast("Prescription Added Successfully"),
           gravity: ToastGravity.BOTTOM,
-          toastDuration: Duration(seconds: 2),
+          toastDuration: const Duration(seconds: 2),
         );
       } else {
         fToast.showToast(
           child: errorToast("Something Went Wrong"),
           gravity: ToastGravity.BOTTOM,
-          toastDuration: Duration(seconds: 2),
+          toastDuration: const Duration(seconds: 2),
         );
       }
     }
 
     void removeIdx(int idx) {
       medicineList.removeAt(idx);
+      setState(() {});
     }
 
     return Scaffold(
@@ -300,8 +317,12 @@ class _PrescriptionComponentState extends State<PrescriptionComponent> {
                 ),
               ],
             ),
+            SizedBox(
+              height: 20.h,
+            ),
             Expanded(
               child: Container(
+                height: 40.h,
                 child: ListView.builder(
                   itemBuilder: (context, idx) {
                     return Column(
@@ -332,49 +353,67 @@ class _PrescriptionComponentState extends State<PrescriptionComponent> {
                                 ],
                               ),
                             ),
-                            Icon(Icons.delete),
+                            (idx == 0)
+                                ? const SizedBox(
+                                    width: 50,
+                                  )
+                                : IconButton(
+                                    onPressed: () => removeIdx(idx),
+                                    icon: const Icon(
+                                      Icons.remove_circle,
+                                      color: Colors.red,
+                                    ))
                           ],
                         ),
                         SizedBox(
                           height: 10.h,
                         ),
                         ((idx + 1) == medicineList.length)
-                            ? Column(children: [
-                                IconButton(
-                                    icon: Icon(Icons.add_circle),
-                                    onPressed: addRow),
-                                SizedBox(
-                                  height: 30.h,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                          child: CustomButtonOutline(
-                                              onPressed: () {}, text: "Reset")),
-                                      SizedBox(
-                                        width: 30.w,
-                                      ),
-                                      Expanded(
-                                          child: CustomButton(
-                                              onPressed: buildData,
-                                              text: "Save"))
-                                    ],
-                                  ),
-                                )
-                              ])
-                            : SizedBox(
+                            ? Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                    Container(
+                                      alignment: Alignment.topLeft,
+                                      width: MediaQuery.of(context).size.width,
+                                      child: IconButton(
+                                          icon: const Icon(
+                                            Icons.add_circle,
+                                            color: Colors.blue,
+                                            size: 30,
+                                          ),
+                                          onPressed: addRow),
+                                    ),
+                                    SizedBox(
+                                      height: 30.h,
+                                    ),
+                                  ])
+                            : const SizedBox(
                                 height: 0,
                               )
                       ],
                     );
                   },
                   itemCount: medicineList.length,
+                  controller: scrollController,
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                children: [
+                  Expanded(
+                      child:
+                          CustomButtonOutline(onPressed: () {}, text: "Reset")),
+                  SizedBox(
+                    width: 30.w,
+                  ),
+                  Expanded(
+                      child: CustomButton(onPressed: buildData, text: "Save"))
+                ],
+              ),
+            )
           ],
         ),
       ),

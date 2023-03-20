@@ -1,23 +1,334 @@
 import 'dart:io';
+import 'package:get/get.dart';
+// ignore: unnecessary_import
+import 'package:get/get_core/src/get_main.dart';
+import 'package:mmdapp_doctor/models/billingModel.dart';
+import 'package:mmdapp_doctor/utils/pdf/pdfController.dart';
+
 import './pdfapi.dart';
-import 'package:mmdapp_doctor/utils/pdf/utils.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
+import '../../models/prescriptionModel.dart';
 
 class PdfInvoiceApi {
-  static Future<File> generate() async {
+  final pdfController = Get.put((PdfController()));
+
+  static Future<File> generate(PrescriptionModel pdfData) async {
     final pdf = Document();
 
-    pdf.addPage(MultiPage(
-      build: (context) => [
+    pdf.addPage(pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        build: (pw.Context context) {
+          return pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                    children: [
+                      pw.Column(
+                          crossAxisAlignment: pw.CrossAxisAlignment.start,
+                          children: [
+                            pw.Text("PATIENT DETAILS",
+                                style: pw.TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: pw.FontWeight.bold)),
+                            pw.SizedBox(height: 20),
+                            pw.Text(pdfData.customerName ?? '',
+                                style: const pw.TextStyle(
+                                  fontSize: 14,
+                                )),
+                            pw.SizedBox(height: 5),
+                            pw.Text(pdfData.mobile.toString() ?? '',
+                                style: const pw.TextStyle(
+                                  fontSize: 17,
+                                )),
+                          ]),
+                      pw.Column(
+                          crossAxisAlignment: pw.CrossAxisAlignment.end,
+                          children: [
+                            pw.Text(pdfData.clinicName ?? '[Clinic Name]',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: pw.FontWeight.bold)),
+                            pw.SizedBox(height: 5),
+                            pw.Text(pdfData.doctorName ?? '[Doctor Name]',
+                                style: const TextStyle(fontSize: 14)),
+                            pw.SizedBox(height: 20),
+                            pw.Text("[Doctor Email]",
+                                style: const TextStyle(fontSize: 14)),
+                            pw.SizedBox(height: 5),
+                            pw.Text("[Doctor Phone]",
+                                style: const TextStyle(fontSize: 14)),
+                            pw.SizedBox(height: 20),
+                            pw.Text("PRESCRIPTION",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: pw.FontWeight.bold)),
+                            pw.SizedBox(height: 10),
+                            pw.Text("Date",
+                                style: const TextStyle(fontSize: 14)),
+                            pw.SizedBox(height: 10),
+                            pw.Text(pdfData.createdAt?.split("T")[0] ?? '',
+                                style: const TextStyle(fontSize: 14)),
+                          ])
+                    ]),
+                pw.SizedBox(height: 40),
+                pw.Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      pw.Column(children: [
+                        pw.Text("Description",
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: pw.FontWeight.bold,
+                                color: PdfColors.blue)),
+                      ]),
+                      pw.Column(children: [
+                        pw.Text("Quantity",
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: pw.FontWeight.bold,
+                                color: PdfColors.blue)),
+                      ]),
+                      pw.Column(children: [
+                        pw.Text("Direction of intake",
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: pw.FontWeight.bold,
+                                color: PdfColors.blue)),
+                      ]),
+                    ]),
+                pw.Container(
+                    child: pw.ListView.builder(
+                  itemBuilder: (context, index) => pw.Column(
+                    children: [
+                      pw.SizedBox(height: 10),
+                      pw.Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            pw.Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  pw.Text(
+                                      pdfData.prescriptionList?[index].name ??
+                                          '',
+                                      textAlign: TextAlign.center)
+                                ]),
+                            pw.Column(children: [pw.Text("1")]),
+                            pw.Column(children: [
+                              pw.Text(
+                                  pdfData.prescriptionList?[index].note ?? '')
+                            ]),
+                          ]),
+                      pw.SizedBox(height: 10),
+                    ],
+                  ),
+                  itemCount: pdfData.prescriptionList?.length ?? 0,
+                )),
+                pw.SizedBox(height: 40),
+                pw.Text("OTHER INFORMATION",
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColors.black)),
+                pw.SizedBox(height: 10),
+                pw.Text(
+                    "We are pleased to provide you with the following information about your health condition and treatment options. Please read this information carefully and discuss any questions you may have with your doctor."),
+                pw.SizedBox(height: 40),
+                pw.Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      pw.Text("Thank You for Trusting Us",
+                          style: pw.TextStyle(
+                              fontSize: 17, fontWeight: pw.FontWeight.normal)),
+                      pw.Text(pdfData.doctorName ?? '[Doctor Name]',
+                          style: pw.TextStyle(
+                              fontSize: 17, fontWeight: pw.FontWeight.normal))
+                    ])
+              ]);
+        }));
 
-        Column(
-          children: 
-        ),
-        SizedBox(height: 3 * PdfPageFormat.cm),
-      ],
-    ));
+    return PdfApi.saveDocument(name: 'my_invoice.pdf', pdf: pdf);
+  }
+
+  static Future<File> generateBill(BillingModel pdfData) async {
+    final pdf = Document();
+
+    pdf.addPage(pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        build: (pw.Context context) {
+          return pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                    children: [
+                      pw.Column(
+                          crossAxisAlignment: pw.CrossAxisAlignment.start,
+                          children: [
+                            pw.Text("PATIENT DETAILS",
+                                style: pw.TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: pw.FontWeight.bold)),
+                            pw.SizedBox(height: 20),
+                            pw.Text(pdfData.customerData?.fullName ?? '',
+                                style: const pw.TextStyle(
+                                  fontSize: 14,
+                                )),
+                            pw.SizedBox(height: 5),
+                            pw.Text(pdfData.customerPhone.toString() ?? '',
+                                style: const pw.TextStyle(
+                                  fontSize: 17,
+                                )),
+                          ]),
+                      pw.Column(
+                          crossAxisAlignment: pw.CrossAxisAlignment.end,
+                          children: [
+                            pw.Text(
+                                pdfData.doctorData?.clinicName ??
+                                    '[Clinic Name]',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: pw.FontWeight.bold)),
+                            pw.SizedBox(height: 5),
+                            pw.Text(
+                                pdfData.doctorData?.fullName ?? '[Doctor Name]',
+                                style: const TextStyle(fontSize: 14)),
+                            pw.SizedBox(height: 20),
+                            pw.Text(
+                                pdfData.doctorData?.email ?? '[Doctor Email]',
+                                style: const TextStyle(fontSize: 14)),
+                            pw.SizedBox(height: 5),
+                            pw.Text(
+                                pdfData.doctorData?.mobile ?? '[Doctor Phone]',
+                                style: const TextStyle(fontSize: 14)),
+                            pw.SizedBox(height: 20),
+                            pw.Text("Invoice",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: pw.FontWeight.bold)),
+                            pw.SizedBox(height: 10),
+                            pw.Text("Invocie No",
+                                style: const TextStyle(fontSize: 14)),
+                            pw.SizedBox(height: 10),
+                            pw.Text(pdfData.id.toString() ?? '',
+                                style: const TextStyle(fontSize: 14)),
+                          ])
+                    ]),
+                pw.SizedBox(height: 40),
+                pw.Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      pw.Column(children: [
+                        pw.Text("Description",
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: pw.FontWeight.bold,
+                                color: PdfColors.blue)),
+                      ]),
+                      pw.Column(children: [
+                        pw.Text("Quantity",
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: pw.FontWeight.bold,
+                                color: PdfColors.blue)),
+                      ]),
+                      pw.Column(children: [
+                        pw.Text("Direction of intake",
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: pw.FontWeight.bold,
+                                color: PdfColors.blue)),
+                      ]),
+                      pw.Column(children: [
+                        pw.Text("General Amount",
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: pw.FontWeight.bold,
+                                color: PdfColors.blue)),
+                      ]),
+                    ]),
+                pw.SizedBox(height: 10),
+                pw.Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      pw.Column(children: [
+                        pw.Text(
+                          "General Consulation",
+                        ),
+                      ]),
+                      pw.Column(children: [
+                        pw.Text(
+                          "-",
+                        ),
+                      ]),
+                      pw.Column(children: [
+                        pw.Text(
+                          "-",
+                        ),
+                      ]),
+                      pw.Column(children: [
+                        pw.Text(
+                          pdfData.consultationCharges.toString(),
+                        ),
+                      ]),
+                    ]),
+                pw.Container(
+                    child: pw.ListView.builder(
+                  itemBuilder: (context, index) => pw.Column(
+                    children: [
+                      pw.SizedBox(height: 10),
+                      pw.Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            pw.Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  pw.Text(
+                                      pdfData.prescriptionData
+                                              ?.prescriptionList?[index].name ??
+                                          '',
+                                      textAlign: TextAlign.center)
+                                ]),
+                            pw.Column(children: [pw.Text("-")]),
+                            pw.Column(children: [
+                              pw.Text(pdfData.prescriptionData
+                                      ?.prescriptionList?[index].note ??
+                                  '')
+                            ]),
+                            pw.Column(children: [pw.Text('-')])
+                          ]),
+                      pw.SizedBox(height: 10),
+                    ],
+                  ),
+                  itemCount:
+                      pdfData.prescriptionData?.prescriptionList?.length ?? 0,
+                )),
+                pw.SizedBox(height: 40),
+                pw.Text("OTHER INFORMATION",
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColors.black)),
+                pw.SizedBox(height: 10),
+                pw.Text(
+                    "We are pleased to provide you with the following information about your health condition and treatment options. Please read this information carefully and discuss any questions you may have with your doctor."),
+                pw.SizedBox(height: 40),
+                pw.Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      pw.Text("Thank You for Trusting Us",
+                          style: pw.TextStyle(
+                              fontSize: 17, fontWeight: pw.FontWeight.normal)),
+                      pw.Text(pdfData.doctorData?.fullName ?? '[Doctor Name]',
+                          style: pw.TextStyle(
+                              fontSize: 17, fontWeight: pw.FontWeight.normal))
+                    ])
+              ]);
+        }));
 
     return PdfApi.saveDocument(name: 'my_invoice.pdf', pdf: pdf);
   }

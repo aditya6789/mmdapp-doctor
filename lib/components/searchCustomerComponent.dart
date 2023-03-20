@@ -52,25 +52,28 @@ class MySearchDelegate extends SearchDelegate<Map> {
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return Center(child: Text('No suggestions found'));
         } else {
-          return ListView.builder(
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) {
-              final suggestion = snapshot.data![index];
-              return ListTile(
-                leading: Icon(Icons.person_2_rounded),
-                title: Text(
-                  suggestion['first_name'] == ''
-                      ? 'No Name'
-                      : suggestion['first_name'],
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                onTap: () {
-                  print("called");
-                  close(context, suggestion);
-                },
-              );
-            },
-          );
+          return (snapshot.data?.isEmpty ?? true)
+              ? Center(
+                  child: Text("No Customers"),
+                )
+              : ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    final suggestion = snapshot.data![index];
+                    return ListTile(
+                      leading: Icon(Icons.person_2_rounded),
+                      title: Text(
+                        suggestion.containsKey('first_name') == ''
+                            ? 'No Name'
+                            : suggestion['first_name'],
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      onTap: () {
+                        close(context, suggestion);
+                      },
+                    );
+                  },
+                );
         }
       },
     );

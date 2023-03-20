@@ -84,19 +84,33 @@ Future<Map<String, dynamic>> getQueueDetails(int queue_id) async {
   }
 }
 
-Future<Map<String, dynamic>> getCustomerDetail(int customer_id) async {
+Future<Map<String, dynamic>> getCustomerDetails(String customerId) async {
   try {
     Response data =
-        await getApi('/api/doctors_m/${customer_id}/get-customer-detail/', {});
+        await getApi('/api/doctors_m/${customerId}/get-customer-detail/', {});
     var body = decodeBody(data.body);
     if (data.statusCode == 200) {
-      return {"success": true, 'customer_status': body['status']};
+      return {"success": true, 'data': body};
     }
     return {"success": false};
   } catch (e) {
     return {'success': false, 'message': "Something Went Wrong"};
   }
 }
+
+// Future<Map<String, dynamic>> getCustomerDetail(int customer_id) async {
+//   try {
+//     Response data =
+//         await getApi('/api/doctors_m/${customer_id}/get-customer-detail/', {});
+//     var body = decodeBody(data.body);
+//     if (data.statusCode == 200) {
+//       return {"success": true, 'customer_status': body['status']};
+//     }
+//     return {"success": false};
+//   } catch (e) {
+//     return {'success': false, 'message': "Something Went Wrong"};
+//   }
+// }
 
 // Request
 // {
@@ -134,12 +148,26 @@ Future<Map<String, dynamic>> createPrescription(Map prescription_data) async {
     Response data = await postApi('/api/prescription/', prescription_data, {});
 
     var body = decodeBody(data.body);
-    print(data);
-    print(body);
+
     if (data.statusCode == 200) {
       return {"success": true};
     }
     return {"success": false};
+  } catch (e) {
+    return {'success': false, 'message': "Something Went Wrong"};
+  }
+}
+
+Future<Map<String, dynamic>> listPrescriptions() async {
+  try {
+    Response data = await getApi('/api/doctors_m/list-prescriptions/', {});
+    var body = decodeBody(data.body);
+    if (data.statusCode == 200) {
+      return {"success": true, 'data': body};
+    } else if (body.contains("msg")) {
+      return {"success": false, 'message': body['msg']};
+    }
+    return {"success": false, 'message': 'Something Went Wrong'};
   } catch (e) {
     return {'success': false, 'message': "Something Went Wrong"};
   }
@@ -159,5 +187,74 @@ Future<List<dynamic>> getCustomers(String query) async {
   } catch (e) {
     print(e);
     return [{}];
+  }
+}
+
+Future<Map<String, dynamic>> createBilling(Map billingData) async {
+  try {
+    Response data =
+        await postApi('/api/doctors_m/create-invoice/', billingData, {});
+    var body = decodeBody(data.body);
+    if (data.statusCode == 200 || data.statusCode == 201) {
+      if (body.containsKey('msg')) {
+        return {'success': true, 'message': body['msg']};
+      }
+      return {'success': true};
+    } else {
+      if (body.containsKey('msg')) {
+        return {'success': false, 'message': body['msg']};
+      } else {
+        return {'success': false};
+      }
+    }
+  } catch (err) {
+    return {'success': false, 'message': 'Something went wrong'};
+  }
+}
+
+Future<Map<String, dynamic>> listBillings() async {
+  try {
+    Response data = await getApi('/api/doctors_m/list-billings/', {});
+    var body = decodeBody(data.body);
+    if (data.statusCode == 200) {
+      return {"success": true, 'data': body};
+    } else if (body.contains("msg")) {
+      return {"success": false, 'message': body['msg']};
+    }
+    return {"success": false, 'message': 'Something Went Wrong'};
+  } catch (e) {
+    return {'success': false, 'message': "Something Went Wrong"};
+  }
+}
+
+Future<Map<String, dynamic>> requestAccess(String customerId) async {
+  try {
+    Response data = await postApi(
+        '/api/doctors_m/${customerId}/send-accessrequest/', {}, {});
+    var body = decodeBody(data.body);
+    if (data.statusCode == 200 || data.statusCode == 201) {
+      return {"success": true, 'data': body};
+    } else if (body.contains("msg")) {
+      return {"success": false, 'message': body['msg']};
+    }
+    return {"success": false, 'message': 'Something Went Wrong'};
+  } catch (e) {
+    return {'success': false, 'message': "Something Went Wrong"};
+  }
+}
+
+Future<Map<String, dynamic>> verifyRAOtp(String customerId, String otp) async {
+  try {
+    Response data = await postApi(
+        '/api/doctors_m/${customerId}/verify-otp/', {"otp": otp}, {});
+    var body = decodeBody(data.body);
+    if (data.statusCode == 200 || data.statusCode == 201) {
+      return {"success": true, 'data': body};
+    } else if (body.contains("msg")) {
+      return {"success": false, 'message': body['msg']};
+    }
+    return {"success": false, 'message': 'Something Went Wrong'};
+  } catch (e) {
+    return {'success': false, 'message': "Something Went Wrong"};
   }
 }

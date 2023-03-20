@@ -2,9 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:mmdapp_doctor/common/utils/customButton.dart';
+import 'package:mmdapp_doctor/landing.dart';
 import 'package:mmdapp_doctor/screens/homeScreen.dart';
 import 'package:mmdapp_doctor/services/auth/authServices.dart';
+import 'package:mmdapp_doctor/utils/customToasts.dart';
 import 'package:mmdapp_doctor/utils/storage.dart';
 
 import '../utils/global_variable.dart';
@@ -21,21 +25,31 @@ class Otp extends StatefulWidget {
 class _OtpState extends State<Otp> {
   int otp = 0;
 
+  FToast ftoast = FToast();
+
+  @override
+  void initState() {
+    super.initState();
+    ftoast.init(context);
+  }
+
   void handleSubmit(context) async {
     Map<String, dynamic> resp = await verifyOtp(widget.mobile, otp);
     if (resp.containsKey('success')) {
       if (resp['status'].toString() == 206.toString()) {
         // Back to login
+        if (resp.containsKey('message')) {
+          ftoast.showToast(child: successToast(resp['message']));
+        }
       }
-      print("success resp");
-      print(resp);
       if (resp['success'] == true) {
         LocalStorage().setAuthTokens(resp['response']);
-        Navigator.pushReplacementNamed(
-            context, '/landing/${HomeScreen.routeName}');
+        Get.to(const LandingScreen(subRoute: 'home'));
       } else {
-        print(resp);
         //Error Show Error
+        if (resp.containsKey('message')) {
+          ftoast.showToast(child: successToast(resp['message']));
+        }
       }
     }
   }

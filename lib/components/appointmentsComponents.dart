@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mmdapp_doctor/models/billingModel.dart';
 import 'package:mmdapp_doctor/services/auth/appointmentServices.dart';
+import 'package:mmdapp_doctor/utils/pdf/pdfapi.dart';
+import 'package:mmdapp_doctor/utils/pdf/pdfgenerateapi.dart';
 
 import '../common/utils/global_variable.dart';
 
@@ -255,16 +258,23 @@ class _UpcomingAppointmentState extends State<UpcomingAppointment> {
   }
 }
 
-class Invoice extends StatelessWidget {
+class Invoice extends StatefulWidget {
   final String invoice;
   final String name;
   final String date;
+  final BillingModel bill;
   const Invoice(
       {super.key,
       required this.invoice,
       required this.name,
-      required this.date});
+      required this.date,
+      required this.bill});
 
+  @override
+  State<Invoice> createState() => _InvoiceState();
+}
+
+class _InvoiceState extends State<Invoice> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -275,11 +285,11 @@ class Invoice extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              date,
+              widget.date,
               style: TextStyle(color: AppColors.darkTextColor, fontSize: 11.sp),
             ),
             Text(
-              "Invoice No: #${invoice}",
+              "Invoice No: #${widget.invoice}",
               style: TextStyle(color: AppColors.darkTextColor, fontSize: 11.sp),
             ),
           ],
@@ -291,32 +301,126 @@ class Invoice extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "${name}",
+              "${widget.name}",
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w600),
             ),
-            Wrap(
-              alignment: WrapAlignment.center,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  "assets/icons/download.svg",
-                  color: AppColors.iconDarkColor,
-                ),
-                SizedBox(
-                  width: 7.w,
-                ),
-                Text(
-                  "Invoice",
-                  style: TextStyle(
-                      color: AppColors.iconDarkColor,
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w500),
-                )
-              ],
+            GestureDetector(
+              onTap: () async {
+                final pdfFile = await PdfInvoiceApi.generateBill(widget.bill);
+                PdfApi.openFile(pdfFile);
+              },
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    "assets/icons/download.svg",
+                    color: AppColors.iconDarkColor,
+                  ),
+                  SizedBox(
+                    width: 7.w,
+                  ),
+                  Text(
+                    "Invoice",
+                    style: TextStyle(
+                        color: AppColors.iconDarkColor,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500),
+                  )
+                ],
+              ),
             )
+          ],
+        ),
+        SizedBox(
+          height: 10.h,
+        ),
+        Divider(
+          thickness: 1,
+          height: 2.h,
+        )
+      ],
+    );
+  }
+}
+
+class PastAppointment extends StatefulWidget {
+  final String invoice;
+  final String name;
+  final String date;
+  const PastAppointment({
+    super.key,
+    required this.invoice,
+    required this.name,
+    required this.date,
+  });
+
+  @override
+  State<PastAppointment> createState() => _PastAppointmentState();
+}
+
+class _PastAppointmentState extends State<PastAppointment> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              widget.date,
+              style: TextStyle(color: AppColors.darkTextColor, fontSize: 11.sp),
+            ),
+            Text(
+              "Invoice No: #${widget.invoice}",
+              style: TextStyle(color: AppColors.darkTextColor, fontSize: 11.sp),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 10.h,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "${widget.name}",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 13.sp,
+                  fontWeight: FontWeight.w600),
+            ),
+            // GestureDetector(
+            //   onTap: () async {
+            //     final pdfFile = await PdfInvoiceApi.generate(widget.bill);
+            //     PdfApi.openFile(pdfFile);
+            //   },
+            //   child: Wrap(
+            //     alignment: WrapAlignment.center,
+            //     crossAxisAlignment: WrapCrossAlignment.center,
+            //     children: [
+            //       SvgPicture.asset(
+            //         "assets/icons/download.svg",
+            //         color: AppColors.iconDarkColor,
+            //       ),
+            //       SizedBox(
+            //         width: 7.w,
+            //       ),
+            //       Text(
+            //         "Invoice",
+            //         style: TextStyle(
+            //             color: AppColors.iconDarkColor,
+            //             fontSize: 14.sp,
+            //             fontWeight: FontWeight.w500),
+            //       )
+            //     ],
+            //   ),
+            // )
           ],
         ),
         SizedBox(

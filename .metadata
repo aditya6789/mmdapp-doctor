@@ -4,8 +4,8 @@
 # This file should be version controlled.
 
 version:
-  revision: 90ffb1c6598a557ea57bd8317370af47f24515f2
-  channel: master
+  revision: 4c25587b71aa91e27c115893f59b48b8b4a22ca9
+  channel: main
 
 project_type: app
 
@@ -13,26 +13,26 @@ project_type: app
 migration:
   platforms:
     - platform: root
-      create_revision: 90ffb1c6598a557ea57bd8317370af47f24515f2
-      base_revision: 90ffb1c6598a557ea57bd8317370af47f24515f2
+      create_revision: 4c25587b71aa91e27c115893f59b48b8b4a22ca9
+      base_revision: 4c25587b71aa91e27c115893f59b48b8b4a22ca9
     - platform: android
-      create_revision: 90ffb1c6598a557ea57bd8317370af47f24515f2
-      base_revision: 90ffb1c6598a557ea57bd8317370af47f24515f2
+      create_revision: 4c25587b71aa91e27c115893f59b48b8b4a22ca9
+      base_revision: 4c25587b71aa91e27c115893f59b48b8b4a22ca9
     - platform: ios
-      create_revision: 90ffb1c6598a557ea57bd8317370af47f24515f2
-      base_revision: 90ffb1c6598a557ea57bd8317370af47f24515f2
+      create_revision: 4c25587b71aa91e27c115893f59b48b8b4a22ca9
+      base_revision: 4c25587b71aa91e27c115893f59b48b8b4a22ca9
     - platform: linux
-      create_revision: 90ffb1c6598a557ea57bd8317370af47f24515f2
-      base_revision: 90ffb1c6598a557ea57bd8317370af47f24515f2
+      create_revision: 4c25587b71aa91e27c115893f59b48b8b4a22ca9
+      base_revision: 4c25587b71aa91e27c115893f59b48b8b4a22ca9
     - platform: macos
-      create_revision: 90ffb1c6598a557ea57bd8317370af47f24515f2
-      base_revision: 90ffb1c6598a557ea57bd8317370af47f24515f2
+      create_revision: 4c25587b71aa91e27c115893f59b48b8b4a22ca9
+      base_revision: 4c25587b71aa91e27c115893f59b48b8b4a22ca9
     - platform: web
-      create_revision: 90ffb1c6598a557ea57bd8317370af47f24515f2
-      base_revision: 90ffb1c6598a557ea57bd8317370af47f24515f2
+      create_revision: 4c25587b71aa91e27c115893f59b48b8b4a22ca9
+      base_revision: 4c25587b71aa91e27c115893f59b48b8b4a22ca9
     - platform: windows
-      create_revision: 90ffb1c6598a557ea57bd8317370af47f24515f2
-      base_revision: 90ffb1c6598a557ea57bd8317370af47f24515f2
+      create_revision: 4c25587b71aa91e27c115893f59b48b8b4a22ca9
+      base_revision: 4c25587b71aa91e27c115893f59b48b8b4a22ca9
 
   # User provided section
 

@@ -22,7 +22,7 @@ class _DateTextFormFieldState extends State<DateTextFormField> {
     return TextFormField(
       controller: widget.controller,
       decoration: InputDecoration(
-          suffixIcon: Icon(Icons.macro_off),
+          suffixIcon: Icon(Icons.date_range),
           hintStyle: TextStyle(fontSize: 11.sp),
           hintText:
               "${DateFormat('dd/MM/yyyy').format(DateTime.now())} (Current Date)"),
@@ -91,7 +91,7 @@ class _BirthTextFormFieldState extends State<BirthTextFormField> {
       decoration: InputDecoration(
         hintText: "dd/mm/yyyy",
         hintStyle: TextStyle(fontSize: 11.sp),
-        suffixIcon: Icon(Icons.macro_off),
+        suffixIcon: Icon(Icons.date_range),
       ),
       onTap: () async {
         DateTime? pickedDate = await showDatePicker(
@@ -142,7 +142,7 @@ class _TimeTextFormFieldState extends State<TimeTextFormField> {
       decoration: InputDecoration(
         hintText: "hh:mm",
         hintStyle: TextStyle(fontSize: 11.sp),
-        suffixIcon: Icon(Icons.lock_clock_sharp),
+        suffixIcon: const Icon(Icons.timer_sharp),
       ),
       onTap: () async {
         TimeOfDay? pickedTime =

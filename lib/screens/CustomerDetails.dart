@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mmdapp_doctor/common/utils/global_variable.dart';
+import 'package:mmdapp_doctor/components/prescriptionComponent.dart';
 import 'package:mmdapp_doctor/services/auth/doctorServices.dart';
+import 'package:mmdapp_doctor/utils/customToasts.dart';
+import 'package:mmdapp_doctor/models/prescriptionModel.dart';
 
 import '../common/utils/customButton.dart';
 import '../common/utils/otpFormWidget.dart';
@@ -32,20 +36,85 @@ class _CustomerDetailsState extends State<CustomerDetails> {
     "prescription_id": 0
   };
 
-  String details_status = 'no access';
+  List<PrescriptionModel> prescs = [];
+
+  String details_status = 'has_access';
+  FToast ftoast = FToast();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    ftoast.init(context);
     int queueId = int.tryParse(widget.queueId) ?? 0;
 
     getQueueDetails(queueId).then((resp) {
       if (resp['success']) {
         customerData = resp['data'];
+        getCustomerDetails(widget.customerId).then((resp) {
+          if (resp['success']) {
+            if (resp.containsKey('data')) {
+              details_status = resp['data']['status'];
+              print("details status");
+              print(resp);
+
+              if (resp['data'].containsKey('patientData')) {
+                var data = resp['data']['patientData']['prev_prescs'] ?? [];
+                for (var i = 0; i < data.length; i++) {
+                  var prescription = data[i];
+                  PrescriptionModel presc =
+                      PrescriptionModel.fromJson(prescription);
+                  prescs.add(presc);
+                }
+              }
+            }
+
+            setState(() {});
+          }
+        });
         setState(() {});
       }
     });
+  }
+
+  void sendRequest() async {
+    Map resp = await requestAccess(widget.customerId);
+    if (resp['success']) {
+      details_status = 'pending';
+      ftoast.showToast(child: successToast("OTP Sent to the user"));
+      setState(() {});
+    } else {
+      ftoast.showToast(child: errorToast("Something went wrong"));
+    }
+  }
+
+  void verifyOtp(String otp) async {
+    Map resp = await verifyRAOtp(widget.customerId, otp);
+    if (resp['success']) {
+      details_status = 'has_access';
+      ftoast.showToast(child: successToast("Access Provided"));
+
+      getCustomerDetails(widget.customerId).then((resp) {
+        if (resp['success']) {
+          if (resp.containsKey('data')) {
+            details_status = resp['data']['status'];
+            var data = resp['data']['patientData']['prescription_list'];
+
+            for (var i = 0; i < data.length; i++) {
+              var prescription = data[i];
+              PrescriptionModel presc =
+                  PrescriptionModel.fromJson(prescription);
+              prescs.add(presc);
+            }
+          }
+
+          setState(() {});
+        }
+      });
+
+      setState(() {});
+    } else {
+      ftoast.showToast(child: errorToast("Something went wrong"));
+    }
   }
 
   @override
@@ -176,12 +245,29 @@ class _CustomerDetailsState extends State<CustomerDetails> {
             SizedBox(
               height: 30.h,
             ),
-            Text(
-              "Pervious Prescriptions",
-              style: TextStyle(
-                  fontSize: 15.sp,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.mainColorbutton),
+            Column(
+              children: [
+                Text(
+                  "Pervious Prescriptions",
+                  style: TextStyle(
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.mainColorbutton),
+                ),
+                SizedBox(height: 30),
+                ListView.separated(
+                    shrinkWrap: true,
+                    primary: false,
+                    itemBuilder: (context, index) => Prescription(
+                          date: prescs[index].createdAt?.split("T")[0] ?? '',
+                          name: prescs[index].customerName ?? '',
+                          presc: prescs[index],
+                        ),
+                    separatorBuilder: (context, index) => SizedBox(
+                          height: 10.h,
+                        ),
+                    itemCount: prescs.length),
+              ],
             ),
             SizedBox(
               height: 20.h,
@@ -190,7 +276,9 @@ class _CustomerDetailsState extends State<CustomerDetails> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 70.w),
                 child: CustomButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    sendRequest();
+                  },
                   text: "Request Access",
                 ),
               ),
@@ -237,7 +325,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                     //handle validation or checks here
                   },
                   //runs when every textfield is filled
-                  onSubmit: (String verificationCode) async {}, // end onSubmit
+                  onSubmit: verifyOtp, // end onSubmit
                 ),
                 SizedBox(
                   height: 50.h,

@@ -57,25 +57,29 @@ class MySearchDelegate extends SearchDelegate<Map> {
 
             print(records);
 
-            return ListView.builder(
-              itemCount: records.length,
-              itemBuilder: (context, index) {
-                final suggestion = records[index];
-                return ListTile(
-                  leading: Icon(Icons.person_2_rounded),
-                  title: Text(
-                    suggestion['customer_name'] == ''
-                        ? 'No Name'
-                        : suggestion['customer_name'],
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  onTap: () {
-                    print("called");
-                    close(context, suggestion);
-                  },
-                );
-              },
-            );
+            return (records.isEmpty ?? true)
+                ? Center(
+                    child: Text("No Customer In The Queue"),
+                  )
+                : ListView.builder(
+                    itemCount: records.length,
+                    itemBuilder: (context, index) {
+                      final suggestion = records[index];
+                      return ListTile(
+                        leading: Icon(Icons.person_2_rounded),
+                        title: Text(
+                          suggestion['customer_name'] == ''
+                              ? 'No Name'
+                              : suggestion['customer_name'],
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        onTap: () {
+                          print("called");
+                          close(context, suggestion);
+                        },
+                      );
+                    },
+                  );
           } else {
             return Center(child: Text('No suggestions found 2'));
           }

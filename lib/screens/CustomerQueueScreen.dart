@@ -39,29 +39,36 @@ class CustomerQueueScreen extends StatelessWidget {
                     future: customerController.fetchCustomerDetails('1'),
                     builder: (BuildContext context,
                         AsyncSnapshot<dynamic> snapshot) {
-                      return ListView.separated(
-                          separatorBuilder: (context, index) => SizedBox(
-                                height: 10.h,
-                              ),
-                          itemCount:
-                              (customerController.customerDetails.value) == null
-                                  ? 0
-                                  : customerController
-                                      .customerDetails.value!.length,
-                          itemBuilder: (context, index) {
-                            return CustomerQueue(
-                              date: customerController
-                                  .customerDetails.value![index].date,
-                              time: customerController
-                                  .customerDetails.value![index].time,
-                              name: customerController
-                                  .customerDetails.value![index].name,
-                              queueId: customerController
-                                  .customerDetails.value![index].queueId,
-                              customerId: customerController
-                                  .customerDetails.value![index].customerId,
-                            );
-                          });
+                      return (customerController
+                                  .customerDetails.value?.isEmpty ??
+                              false)
+                          ? Center(
+                              child: Text("No Customer in The Queue"),
+                            )
+                          : ListView.separated(
+                              separatorBuilder: (context, index) => SizedBox(
+                                    height: 10.h,
+                                  ),
+                              itemCount:
+                                  (customerController.customerDetails.value) ==
+                                          null
+                                      ? 0
+                                      : customerController
+                                          .customerDetails.value!.length,
+                              itemBuilder: (context, index) {
+                                return CustomerQueue(
+                                  date: customerController
+                                      .customerDetails.value![index].date,
+                                  time: customerController
+                                      .customerDetails.value![index].time,
+                                  name: customerController
+                                      .customerDetails.value![index].name,
+                                  queueId: customerController
+                                      .customerDetails.value![index].queueId,
+                                  customerId: customerController
+                                      .customerDetails.value![index].customerId,
+                                );
+                              });
                     }),
               )
             ],

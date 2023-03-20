@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -44,6 +46,27 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
     TextEditingController fromDate = TextEditingController();
     TextEditingController toDate = TextEditingController();
 
+    //function for reseting the form
+    void resetForm() {
+      fromDate.clear();
+      toDate.clear();
+      timeslots = [
+        [
+          {
+            "controller": TextEditingController(),
+            "idx": 0,
+          },
+          {
+            "controller": TextEditingController(),
+            "idx": 0,
+          },
+        ],
+      ];
+      setState(() {
+        timeslots = timeslots;
+      });
+    }
+
     void addRow() {
       var len = timeslots.length;
       timeslots.add([
@@ -57,7 +80,13 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
         },
       ]);
 
-      print(timeslots);
+      setState(() {
+        timeslots = timeslots;
+      });
+    }
+
+    void removeRow(int idx) {
+      timeslots.removeAt(idx);
       setState(() {
         timeslots = timeslots;
       });
@@ -89,13 +118,13 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
           fToast.showToast(
             child: successToast(resp['msg']),
             gravity: ToastGravity.BOTTOM,
-            toastDuration: Duration(seconds: 2),
+            toastDuration: const Duration(seconds: 2),
           );
         } else {
           fToast.showToast(
             child: errorToast(resp['msg']),
             gravity: ToastGravity.BOTTOM,
-            toastDuration: Duration(seconds: 2),
+            toastDuration: const Duration(seconds: 2),
           );
         }
 
@@ -103,19 +132,15 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
       }
     }
 
-    void removeIdx(int idx) {
-      timeslots.removeAt(idx);
-    }
-
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
               onPressed: () {},
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back,
                 color: Colors.blue,
               )),
-          title: Text(
+          title: const Text(
             "Add Schedule ",
             style: TextStyle(color: Colors.blue),
           ),
@@ -180,89 +205,95 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
                   ],
                 ),
                 Expanded(
-                  child: Container(
-                    child: ListView.builder(
-                      itemBuilder: (context, idx) {
-                        return Column(
-                          children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Start Time',
-                                        style: TextStyle(fontSize: 13.sp),
-                                      ),
-                                      TimeTextFormField(
-                                        controller: timeslots[idx][0]
-                                            ['controller'],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 30.w,
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'End Time',
-                                        style: TextStyle(fontSize: 13.sp),
-                                      ),
-                                      TimeTextFormField(
-                                          controller: timeslots[idx][1]
-                                              ['controller']),
-                                    ],
-                                  ),
-                                ),
-                                Icon(Icons.delete),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10.h,
-                            ),
-                            ((idx + 1) == timeslots.length)
-                                ? Column(children: [
-                                    IconButton(
-                                        icon: Icon(Icons.add_circle),
-                                        onPressed: addRow),
-                                    SizedBox(
-                                      height: 30.h,
+                  child: ListView.builder(
+                    itemBuilder: (context, idx) {
+                      return Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Start Time',
+                                      style: TextStyle(fontSize: 13.sp),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 20),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                              child: CustomButtonOutline(
-                                                  onPressed: () {},
-                                                  text: "Reset")),
-                                          SizedBox(
-                                            width: 30.w,
-                                          ),
-                                          Expanded(
-                                              child: CustomButton(
-                                                  onPressed: buildData,
-                                                  text: "Save"))
-                                        ],
+                                    TimeTextFormField(
+                                      controller: timeslots[idx][0]
+                                          ['controller'],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                width: 30.w,
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'End Time',
+                                      style: TextStyle(fontSize: 13.sp),
+                                    ),
+                                    TimeTextFormField(
+                                        controller: timeslots[idx][1]
+                                            ['controller']),
+                                  ],
+                                ),
+                              ),
+                              (idx != 0)
+                                  ? IconButton(
+                                      icon: const Icon(
+                                        Icons.remove_circle,
+                                        color: Colors.red,
                                       ),
+                                      onPressed: () => removeRow(idx),
                                     )
-                                  ])
-                                : SizedBox(
-                                    height: 0,
+                                  : const SizedBox(
+                                      width: 50,
+                                    )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          ((idx + 1) == timeslots.length)
+                              ? Column(children: [
+                                  IconButton(
+                                      icon: const Icon(Icons.add_circle),
+                                      onPressed: addRow),
+                                  SizedBox(
+                                    height: 30.h,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                            child: CustomButtonOutline(
+                                                onPressed: resetForm,
+                                                text: "Reset")),
+                                        SizedBox(
+                                          width: 30.w,
+                                        ),
+                                        Expanded(
+                                            child: CustomButton(
+                                                onPressed: buildData,
+                                                text: "Save"))
+                                      ],
+                                    ),
                                   )
-                          ],
-                        );
-                      },
-                      itemCount: timeslots.length,
-                    ),
+                                ])
+                              : const SizedBox(
+                                  height: 0,
+                                )
+                        ],
+                      );
+                    },
+                    itemCount: timeslots.length,
                   ),
                 ),
               ],

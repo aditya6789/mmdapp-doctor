@@ -49,7 +49,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
                     labelColor: AppColors.mainColorbutton,
                     indicatorColor: AppColors.mainColorbutton,
                     indicatorSize: TabBarIndicatorSize.label,
-                    onTap:(int t)=> setState(() {}),
+                    onTap: (int t) => setState(() {}),
                     tabs: [
                       Padding(
                         padding: EdgeInsets.only(bottom: 15.h),
@@ -83,74 +83,86 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(20),
-                    child: ListView.separated(
-                        shrinkWrap: true,
-                        primary: false,
-                        itemBuilder: (context, index) => Appointment(
-                            date: appController.todayAppointments.value?[index]
-                                    .appointmentDate ??
-                                '[Date]',
-                            time: appController.todayAppointments.value?[index]
-                                    .startTime ??
-                                '[StartTime]',
-                            status: appController
-                                    .todayAppointments.value?[index].status
-                                    .toString() ??
-                                '0',
-                            id: appController.todayAppointments.value?[index].id ??
-                                -1,
-                            name: appController.todayAppointments.value?[index]
-                                    .patientName ??
-                                '[Pat. Name]'),
-                        separatorBuilder: (context, index) => SizedBox(
-                              height: 10.h,
-                            ),
-                        itemCount: appController.todayAppointments.value?.length ?? 0),
+                    child: (appController.todayAppointments.value?.isEmpty ??
+                            true)
+                        ? Center(
+                            child: Text("No Today's Appointments"),
+                          )
+                        : ListView.separated(
+                            shrinkWrap: true,
+                            primary: false,
+                            itemBuilder: (context, index) => Appointment(
+                                date: appController.todayAppointments
+                                        .value?[index].appointmentDate ??
+                                    '[Date]',
+                                time: appController.todayAppointments
+                                        .value?[index].startTime ??
+                                    '[StartTime]',
+                                status: appController.todayAppointments.value?[index].status.toString() ??
+                                    '0',
+                                id: appController.todayAppointments.value?[index].id ??
+                                    -1,
+                                name: appController.todayAppointments
+                                        .value?[index].patientName ??
+                                    '[Pat. Name]'),
+                            separatorBuilder: (context, index) => SizedBox(
+                                  height: 10.h,
+                                ),
+                            itemCount: appController.todayAppointments.value?.length ?? 0),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(20),
-                    child: ListView.separated(
-                        shrinkWrap: true,
-                        primary: false,
-                        itemBuilder: (context, index) => UpcomingAppointment(
-                            date: appController.upcomingAppointments
-                                    .value?[index].appointmentDate ??
-                                '[Date]',
-                            time: appController.upcomingAppointments
-                                    .value?[index].startTime ??
-                                '[StartTime]',
-                            status: appController
-                                    .upcomingAppointments.value?[index].status
-                                    .toString() ??
-                                '0',
-                            id: appController.upcomingAppointments.value?[index].id ??
-                                -1,
-                            name: appController.upcomingAppointments
-                                    .value?[index].patientName ??
-                                '[Pat. Name]'),
-                        separatorBuilder: (context, index) => SizedBox(
-                              height: 10.h,
-                            ),
-                        itemCount: appController.upcomingAppointments.value?.length ?? 0),
+                    child: (appController.upcomingAppointments.value?.isEmpty ??
+                            false)
+                        ? Center(
+                            child: Text("No Upcoming Appointments"),
+                          )
+                        : ListView.separated(
+                            shrinkWrap: true,
+                            primary: false,
+                            itemBuilder: (context, index) => UpcomingAppointment(
+                                date: appController.upcomingAppointments
+                                        .value?[index].appointmentDate ??
+                                    '[Date]',
+                                time: appController.upcomingAppointments
+                                        .value?[index].startTime ??
+                                    '[StartTime]',
+                                status: appController.upcomingAppointments
+                                        .value?[index].status
+                                        .toString() ??
+                                    '0',
+                                id: appController.upcomingAppointments.value?[index].id ??
+                                    -1,
+                                name: appController.upcomingAppointments.value?[index].patientName ?? '[Pat. Name]'),
+                            separatorBuilder: (context, index) => SizedBox(
+                                  height: 10.h,
+                                ),
+                            itemCount: appController.upcomingAppointments.value?.length ?? 0),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(20),
-                    child: ListView.separated(
-                        shrinkWrap: true,
-                        primary: false,
-                        itemBuilder: (context, index) => Invoice(
-                            invoice: '#8677',
-                            date: appController.pastAppointments.value?[index]
-                                    .appointmentDate ??
-                                '[Date]',
-                            name: appController.pastAppointments.value?[index]
-                                    .patientName ??
-                                ''),
-                        separatorBuilder: (context, index) => SizedBox(
-                              height: 10.h,
-                            ),
-                        itemCount:
-                            appController.pastAppointments.value?.length ?? 0),
+                    child: (appController.pastAppointments.value?.isEmpty ??
+                            false)
+                        ? Center(
+                            child: Text("No Today's Appointments"),
+                          )
+                        : ListView.separated(
+                            shrinkWrap: true,
+                            primary: false,
+                            itemBuilder: (context, index) => PastAppointment(
+                                invoice: '#8677',
+                                date: appController.pastAppointments
+                                        .value?[index].appointmentDate ??
+                                    '[Date]',
+                                name: appController.pastAppointments
+                                        .value?[index].patientName ??
+                                    ''),
+                            separatorBuilder: (context, index) => SizedBox(
+                                  height: 10.h,
+                                ),
+                            itemCount:
+                                appController.pastAppointments.value?.length ??
+                                    0),
                   )
                 ],
               ),

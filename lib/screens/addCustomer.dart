@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mmdapp_doctor/components/searchCustomerComponent.dart';
+import 'package:mmdapp_doctor/landing.dart';
 import 'package:mmdapp_doctor/screens/homeScreen.dart';
 import 'package:mmdapp_doctor/services/auth/doctorServices.dart';
 import 'package:mmdapp_doctor/utils/customToasts.dart';
@@ -42,6 +43,7 @@ class _AddCustomerState extends State<AddCustomer> {
     int userId = int.tryParse(userController.value.text) ?? 0;
 
     Map userData = {};
+
     if (userId == 0) {
       userData = {
         "first_name": customer_name.value.text,
@@ -63,13 +65,14 @@ class _AddCustomerState extends State<AddCustomer> {
 
     Map resp = await addNewCustomerQueue(userData);
     if (resp["success"]) {
-      Navigator.pushReplacementNamed(
-          context, '/landing/${HomeScreen.routeName}');
+      Get.to(() => const LandingScreen(
+            subRoute: HomeScreen.routeName,
+          ));
 
       fToast.showToast(
-        child: successToast("Added Successfully Wrong"),
+        child: successToast("Added Successfully"),
         gravity: ToastGravity.BOTTOM,
-        toastDuration: Duration(seconds: 2),
+        toastDuration: const Duration(seconds: 2),
       );
     } else {
       if (resp.containsKey("body")) {
@@ -78,14 +81,14 @@ class _AddCustomerState extends State<AddCustomer> {
           fToast.showToast(
             child: errorToast("Mobile No. Already Exists"),
             gravity: ToastGravity.BOTTOM,
-            toastDuration: Duration(seconds: 2),
+            toastDuration: const Duration(seconds: 2),
           );
         }
       } else {
         fToast.showToast(
           child: errorToast("Something Went Wrong"),
           gravity: ToastGravity.BOTTOM,
-          toastDuration: Duration(seconds: 2),
+          toastDuration: const Duration(seconds: 2),
         );
       }
     }
@@ -94,16 +97,17 @@ class _AddCustomerState extends State<AddCustomer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.arrow_back,
               color: Colors.blue,
             )),
-        title: Text(
+        title: const Text(
           "Add Customer",
           style: TextStyle(color: Colors.black),
         ),
@@ -112,144 +116,150 @@ class _AddCustomerState extends State<AddCustomer> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            SearchCustomer(controller: userController),
-            SizedBox(
-              height: 20.h,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(),
+            child: Column(
               children: [
-                Text(
-                  "Date",
-                  style:
-                      TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
+                SearchCustomer(controller: userController),
+                SizedBox(
+                  height: 20.h,
                 ),
-                DateTextFormField(
-                  controller: dateInput,
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Customer Name",
-                  style:
-                      TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
-                ),
-                CustomTextFormField(
-                  controller: customer_name,
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Moblie Number",
-                  style:
-                      TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
-                ),
-                CustomTextFormField(
-                  controller: mobile,
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Email Id",
-                  style:
-                      TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
-                ),
-                CustomTextFormField(
-                  controller: email,
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Date of Birth",
-                  style:
-                      TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
-                ),
-                BirthTextFormField(
-                  controller: dobDate,
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Address",
-                  style:
-                      TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
-                ),
-                CustomTextFormField(
-                  controller: address,
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Additional Notes",
-                  style:
-                      TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
-                ),
-                CustomTextFormField(
-                  controller: note,
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: CustomButtonOutline(
-                    onPressed: () {},
-                    text: "Reset",
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Date",
+                      style: TextStyle(
+                          fontSize: 14.sp, fontWeight: FontWeight.w500),
+                    ),
+                    DateTextFormField(
+                      controller: dateInput,
+                    ),
+                  ],
                 ),
                 SizedBox(
-                  width: 30.w,
+                  height: 20.h,
                 ),
-                Expanded(
-                  child: CustomButton(
-                    onPressed: submitHandler,
-                    text: "Save",
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Customer Name",
+                      style: TextStyle(
+                          fontSize: 14.sp, fontWeight: FontWeight.w500),
+                    ),
+                    CustomTextFormField(
+                      controller: customer_name,
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20.h,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Moblie Number",
+                      style: TextStyle(
+                          fontSize: 14.sp, fontWeight: FontWeight.w500),
+                    ),
+                    CustomTextFormField(
+                      controller: mobile,
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20.h,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Email Id",
+                      style: TextStyle(
+                          fontSize: 14.sp, fontWeight: FontWeight.w500),
+                    ),
+                    CustomTextFormField(
+                      controller: email,
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20.h,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Date of Birth",
+                      style: TextStyle(
+                          fontSize: 14.sp, fontWeight: FontWeight.w500),
+                    ),
+                    BirthTextFormField(
+                      controller: dobDate,
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20.h,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Address",
+                      style: TextStyle(
+                          fontSize: 14.sp, fontWeight: FontWeight.w500),
+                    ),
+                    CustomTextFormField(
+                      controller: address,
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20.h,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Additional Notes",
+                      style: TextStyle(
+                          fontSize: 14.sp, fontWeight: FontWeight.w500),
+                    ),
+                    CustomTextFormField(
+                      controller: note,
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20.h,
+                ),
+                Row(
+                  children: [
+                    Flexible(
+                      child: CustomButtonOutline(
+                        onPressed: () {},
+                        text: "Reset",
+                      ),
+                    ),
+                    Container(
+                      width: 30.w,
+                    ),
+                    Flexible(
+                      child: CustomButton(
+                        onPressed: submitHandler,
+                        text: "Save",
+                      ),
+                    )
+                  ],
                 )
               ],
-            )
-          ],
+            ),
+          ),
         ),
       ),
     );

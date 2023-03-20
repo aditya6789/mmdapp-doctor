@@ -110,15 +110,12 @@ decodeBody(String body) {
 Future<bool> isUserAuthenticated() async {
   try {
     Map userTokenData = await LocalStorage().getAuthTokens();
-    print(userTokenData);
-    print("token data");
     if (userTokenData.containsKey('user')) {
+      print(userTokenData['user']);
       return true;
     }
     return false;
   } catch (e) {
-    print("error user authenticated");
-    print(e);
     return false;
   }
 }
