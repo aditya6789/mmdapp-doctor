@@ -7,24 +7,30 @@ import 'package:mmdapp_doctor/screens/loginScreen.dart';
 import 'package:mmdapp_doctor/utils/storage.dart';
 import 'package:mmdapp_doctor/services/urlconstants.dart' as UrlConsts;
 
-String base_url = "http://10.0.2.2:8000";
+// String base_url = "http://10.0.2.2:8000";
+String base_url = "https://api.mymedbook.in";
 
 Future<http.Response> getApi(String route, Map<String, String>? headers) async {
   var authToken = await getUserToken();
-  headers?["Authorization"] = "JWT ${authToken}";
+  // print(authToken.isEmpty);
+  headers?["Authorization"] = "JWT $authToken";
   var response = await http.get(Uri.parse(base_url + route), headers: headers);
   if (response.statusCode == 200 || response.statusCode == 201) {
     return response;
   } else {
     if (response.statusCode == 401) {
+      if (authToken.isEmpty) {
+        Get.to(const LoginScreen());
+      }
       var resp = jsonDecode(response.body);
+      print(resp);
       String? errorMsg = resp['detail'];
       if (errorMsg != null) {
         if (errorMsg.contains('expired')) {
           bool tokenUpdated = await tokenExpiredHandler();
           if (tokenUpdated == false) {
             await LocalStorage().clearAuthTokens();
-            Get.to(LoginScreen());
+            Get.to(const LoginScreen());
             // Get.to('/login');
           } else {
             return await getApi(route, headers);
@@ -70,7 +76,7 @@ Future<http.Response> postApi(
           bool tokenUpdated = await tokenExpiredHandler();
           if (tokenUpdated == false) {
             await LocalStorage().clearAuthTokens();
-            Get.to(LoginScreen());
+            Get.to(const LoginScreen());
             // Get.to('/login');
           } else {
             return await postApi(route, body, headers);

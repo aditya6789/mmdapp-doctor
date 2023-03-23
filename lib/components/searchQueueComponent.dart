@@ -91,15 +91,15 @@ class MySearchDelegate extends SearchDelegate<Map> {
 
 class SearchQueue extends StatefulWidget {
   final TextEditingController controller;
-  const SearchQueue({required this.controller});
+  final TextEditingController selectedController;
+  const SearchQueue(
+      {required this.controller, required this.selectedController});
 
   @override
   State<SearchQueue> createState() => _SearchQueueState();
 }
 
 class _SearchQueueState extends State<SearchQueue> {
-  final TextEditingController controller = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -120,10 +120,10 @@ class _SearchQueueState extends State<SearchQueue> {
                   hintText: 'Search Customer',
                   border: InputBorder.none,
                 ),
-                controller: controller,
+                controller: widget.selectedController,
                 onChanged: (value) async {
                   widget.controller.text = '';
-                  controller.text = '';
+                  widget.selectedController.text = '';
                   Map? result = await showSearch<Map>(
                     context: context,
                     delegate: MySearchDelegate(options: ['s']),
@@ -131,7 +131,8 @@ class _SearchQueueState extends State<SearchQueue> {
 
                   if (result != null) {
                     widget.controller.text = result['id'].toString() ?? '';
-                    controller.text = result['customer_name'] ?? "";
+                    widget.selectedController.text =
+                        result['customer_name'] ?? "";
                   }
                 },
                 onTap: () async {
@@ -142,7 +143,8 @@ class _SearchQueueState extends State<SearchQueue> {
 
                   if (result != null) {
                     widget.controller.text = result['id'].toString() ?? '';
-                    controller.text = result['customer_name'] ?? '';
+                    widget.selectedController.text =
+                        result['customer_name'] ?? '';
                   }
                 },
               ),

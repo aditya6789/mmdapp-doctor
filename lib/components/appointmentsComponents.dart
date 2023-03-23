@@ -15,7 +15,7 @@ class Appointment extends StatefulWidget {
   final String status;
   final int id;
 
-  Appointment({
+  const Appointment({
     super.key,
     required this.date,
     required this.time,
@@ -81,12 +81,12 @@ class _AppointmentState extends State<Appointment> {
                     DropdownMenuItem(
                       value: '0',
                       child: Container(
-                        child: Text(
+                        child: const Text(
                           "Pending",
                           style: TextStyle(color: Colors.white),
                         ),
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
+                        padding: const EdgeInsets.all(5),
+                        decoration: const BoxDecoration(
                             color: Color.fromARGB(255, 247, 132, 8),
                             borderRadius: BorderRadius.all(Radius.circular(4))),
                       ),
@@ -94,12 +94,12 @@ class _AppointmentState extends State<Appointment> {
                     DropdownMenuItem(
                       value: '1',
                       child: Container(
-                        child: Text(
+                        child: const Text(
                           "Confirm",
                           style: TextStyle(color: Colors.white),
                         ),
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
+                        padding: const EdgeInsets.all(5),
+                        decoration: const BoxDecoration(
                             color: Colors.green,
                             borderRadius: BorderRadius.all(Radius.circular(4))),
                       ),
@@ -107,12 +107,12 @@ class _AppointmentState extends State<Appointment> {
                     DropdownMenuItem(
                       value: '2',
                       child: Container(
-                        child: Text(
+                        child: const Text(
                           "Rejected",
                           style: TextStyle(color: Colors.white),
                         ),
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
+                        padding: const EdgeInsets.all(5),
+                        decoration: const BoxDecoration(
                             color: Colors.red,
                             borderRadius: BorderRadius.all(Radius.circular(4))),
                       ),
@@ -140,7 +140,7 @@ class UpcomingAppointment extends StatefulWidget {
   final String name;
   final int id;
 
-  UpcomingAppointment({
+  const UpcomingAppointment({
     super.key,
     required this.date,
     required this.time,
@@ -206,12 +206,12 @@ class _UpcomingAppointmentState extends State<UpcomingAppointment> {
                     DropdownMenuItem(
                       value: '0',
                       child: Container(
-                        child: Text(
+                        child: const Text(
                           "Pending",
                           style: TextStyle(color: Colors.white),
                         ),
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
+                        padding: const EdgeInsets.all(5),
+                        decoration: const BoxDecoration(
                             color: Color.fromARGB(255, 247, 132, 8),
                             borderRadius: BorderRadius.all(Radius.circular(4))),
                       ),
@@ -219,12 +219,12 @@ class _UpcomingAppointmentState extends State<UpcomingAppointment> {
                     DropdownMenuItem(
                       value: '1',
                       child: Container(
-                        child: Text(
+                        child: const Text(
                           "Confirm",
                           style: TextStyle(color: Colors.white),
                         ),
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
+                        padding: const EdgeInsets.all(5),
+                        decoration: const BoxDecoration(
                             color: Colors.green,
                             borderRadius: BorderRadius.all(Radius.circular(4))),
                       ),
@@ -232,12 +232,12 @@ class _UpcomingAppointmentState extends State<UpcomingAppointment> {
                     DropdownMenuItem(
                       value: '2',
                       child: Container(
-                        child: Text(
+                        child: const Text(
                           "Rejected",
                           style: TextStyle(color: Colors.white),
                         ),
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
+                        padding: const EdgeInsets.all(5),
+                        decoration: const BoxDecoration(
                             color: Colors.red,
                             borderRadius: BorderRadius.all(Radius.circular(4))),
                       ),

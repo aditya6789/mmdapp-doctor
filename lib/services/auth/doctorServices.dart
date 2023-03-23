@@ -258,3 +258,99 @@ Future<Map<String, dynamic>> verifyRAOtp(String customerId, String otp) async {
     return {'success': false, 'message': "Something Went Wrong"};
   }
 }
+
+//get doctor tags
+Future<Map<String, dynamic>> getDoctorTags() async {
+  try {
+    Response data = await getApi('/api/doctors_m/doctor_tags/', {});
+    var body = decodeBody(data.body);
+    if (data.statusCode == 200) {
+      return {
+        "success": true,
+        'data': body['data'],
+        'message': 'Fetched Successfully'
+      };
+    } else if (body.contains("msg")) {
+      return {"success": false, 'message': body['msg']};
+    }
+    return {"success": false, 'message': 'Something Went Wrong'};
+  } catch (e) {
+    return {'success': false, 'message': "Something Went Wrong"};
+  }
+}
+
+// {}
+//add doctor tags
+Future<Map<String, dynamic>> addDoctorTags(String id, bool remove) async {
+  try {
+    Response data = await postApi(
+        '/api/doctors_m/doctor_tags/', {"tag_id": id, "remove": remove}, {});
+    var body = decodeBody(data.body);
+    if (data.statusCode == 200) {
+      return {"success": true, 'message': 'Added Successfully'};
+    } else if (body.contains("msg")) {
+      return {"success": false, 'message': body['msg']};
+    }
+    return {"success": false, 'message': 'Something Went Wrong'};
+  } catch (e) {
+    return {'success': false, 'message': "Something Went Wrong"};
+  }
+}
+
+// get-dashboard-stats
+Future<Map<String, dynamic>> getDashboardStats() async {
+  try {
+    Response data = await getApi('/api/doctors_m/get-dashboard-stats/', {});
+    var body = decodeBody(data.body);
+    if (data.statusCode == 200) {
+      return {"success": true, 'data': body, 'message': 'Fetched Successfully'};
+    } else if (body.contains("msg")) {
+      return {"success": false, 'message': body['msg']};
+    }
+    return {"success": false, 'message': 'Something Went Wrong'};
+  } catch (e) {
+    return {'success': false, 'message': "Something Went Wrong"};
+  }
+}
+
+//get profile data
+Future<Map<String, dynamic>> getProfileData() async {
+  try {
+    Response data = await getApi("/api/userpanel/get-profile", {});
+    Map<String, dynamic> body = decodeBody(data.body);
+
+    if (body.containsKey("success")) {
+      return {
+        'success': body["success"],
+        'message': body["msg"],
+        'data': body['data']
+      };
+    } else {
+      return {'success': false, 'message': 'Something Went Wrong'};
+    }
+  } catch (e) {
+    return {'success': false, 'message': "Something Went Wrong"};
+  }
+}
+
+//update profile data
+Future<Map<String, dynamic>> updateProfileData(Map profileData) async {
+  try {
+    Response data =
+        await postApi("/api/userpanel/update-profile/", profileData, {});
+    Map<String, dynamic> body = decodeBody(data.body);
+
+    if (body.containsKey("success")) {
+      return {
+        'success': body["success"],
+        'message': body["msg"],
+        'data': body['data']
+      };
+    } else {
+      return {'success': false, 'message': 'Something Went Wrong'};
+    }
+  } catch (e) {
+    print(e);
+    return {'success': false, 'message': "Something Went Wrong"};
+  }
+}

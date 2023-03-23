@@ -46,6 +46,7 @@ dependencies:
   fluttertoast: ^8.2.1
   pdf: ^3.9.0
   open_file: ^3.2.1
+  file_picker: ^4.6.1
 
 dev_dependencies:
   flutter_test:

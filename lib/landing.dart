@@ -1,11 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:mmdapp_doctor/screens/addCategory.dart';
 import 'package:mmdapp_doctor/screens/appointmentsScreen.dart';
 import 'package:mmdapp_doctor/screens/billingScreen.dart';
 import 'package:mmdapp_doctor/screens/homeScreen.dart';
+import 'package:mmdapp_doctor/screens/loginScreen.dart';
 import 'package:mmdapp_doctor/screens/prescriptionScreen.dart';
 import 'package:mmdapp_doctor/screens/addScheduleScreen.dart';
+import 'package:mmdapp_doctor/services/auth/doctorServices.dart';
+import 'package:mmdapp_doctor/utils/api_utils.dart';
 
 import 'common/utils/global_variable.dart';
 
@@ -19,18 +24,68 @@ class LandingScreen extends StatefulWidget {
 }
 
 class _LandingScreenState extends State<LandingScreen> {
-  PageController _pageController = PageController();
-  List<Widget> _screen = [
-    HomeScreen(),
-    AppointmentsScreen(),
-    PrescriptionScreen(),
-    AddScheduleScreen(),
-    BillingScreen(),
+  final PageController _pageController = PageController();
+  final List<Widget> _screen = [
+    const HomeScreen(),
+    const AppointmentsScreen(),
+    const PrescriptionScreen(),
+    const AddScheduleScreen(),
+    const BillingScreen(),
   ];
+
+  List<String> screenRoutes = [
+    HomeScreen.routeName,
+    AppointmentsScreen.routeName,
+    PrescriptionScreen.routeName,
+    AddScheduleScreen.routeName,
+    BillingScreen.routeName,
+  ];
+
+  List<Map> tags = [];
+  List<Map> remainingTags = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _checkLoginStatus();
+
+    getDoctorTags().then((value) {
+      if (value['success'] == true) {
+        print(value);
+        if (value.containsKey('data')) {
+          if (value['data'].containsKey('tags')) {
+            if (value['data']['tags'].length == 0) {
+              Get.to(AddDoctorTagScreen(
+                tags: value['data']['tags'],
+                remainingTags: value['data']['remaining_tags'],
+              ));
+            }
+          }
+        }
+      }
+    });
+  }
+
+  void _checkLoginStatus() async {
+    bool authenticated = await isUserAuthenticated();
+
+    if (!authenticated) {
+      Get.to(const LoginScreen());
+    }
+  }
+
   void _onPageChanged(int index) {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  void onLoad() {
+    if (widget.subRoute != '') {
+      int index = screenRoutes.indexOf(widget.subRoute);
+      _pageController.jumpToPage(index);
+    }
   }
 
   void _onItemTapped(int selectedIndex) {
@@ -45,7 +100,7 @@ class _LandingScreenState extends State<LandingScreen> {
         controller: _pageController,
         children: _screen,
         onPageChanged: _onPageChanged,
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
       ),
       bottomNavigationBar: ClipRRect(
         borderRadius: const BorderRadius.only(
@@ -59,10 +114,10 @@ class _LandingScreenState extends State<LandingScreen> {
           type: BottomNavigationBarType.fixed,
           unselectedItemColor: Colors.black,
           iconSize: 20,
-          backgroundColor: Color.fromARGB(255, 240, 239, 239),
+          backgroundColor: const Color.fromARGB(255, 240, 239, 239),
           selectedLabelStyle:
-              TextStyle(fontWeight: FontWeight.w500, fontSize: 10),
-          unselectedLabelStyle: TextStyle(
+              const TextStyle(fontWeight: FontWeight.w500, fontSize: 10),
+          unselectedLabelStyle: const TextStyle(
               fontSize: 10, fontWeight: FontWeight.w500, color: Colors.black),
           onTap: _onItemTapped,
           items: [

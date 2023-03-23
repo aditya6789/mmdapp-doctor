@@ -11,11 +11,11 @@ class Customers extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {},
-            icon: Icon(
+            icon: const Icon(
               Icons.arrow_back,
               color: Colors.blue,
             )),
-        title: Text(
+        title: const Text(
           "Customers",
           style: TextStyle(color: Colors.blue),
         ),
@@ -31,7 +31,7 @@ class Customers extends StatelessWidget {
                 ListView.separated(
                     shrinkWrap: true,
                     primary: false,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) => CustomersComponent(
                           date: "25/12/2021",
                           name: "Aditya Paswan",

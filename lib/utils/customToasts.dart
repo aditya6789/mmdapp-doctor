@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
 
+//get truncated string
+String getTruncatedString(String str) {
+  if (str.length > 30) {
+    return str.substring(0, 15) + '...';
+  } else {
+    return str;
+  }
+}
+
 Widget successToast(String msg) {
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
@@ -14,7 +23,7 @@ Widget successToast(String msg) {
         SizedBox(
           width: 12.0,
         ),
-        Text(msg),
+        Text(getTruncatedString(msg)),
       ],
     ),
   );
@@ -34,7 +43,10 @@ Widget errorToast(String msg) {
         SizedBox(
           width: 12.0,
         ),
-        Text(msg),
+        Text(
+          getTruncatedString(msg),
+          style: TextStyle(color: Colors.white),
+        ),
       ],
     ),
   );

@@ -97,7 +97,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
         if (resp['success']) {
           if (resp.containsKey('data')) {
             details_status = resp['data']['status'];
-            var data = resp['data']['patientData']['prescription_list'];
+            var data = resp['data']['patientData']['prescription_list'] ?? [];
 
             for (var i = 0; i < data.length; i++) {
               var prescription = data[i];
@@ -136,211 +136,212 @@ class _CustomerDetailsState extends State<CustomerDetails> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
-                      "Full Name",
-                      style: TextStyle(
-                          color: AppColors.mainColorbutton,
-                          fontSize: 12.h,
-                          fontWeight: FontWeight.w600),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Full Name",
+                          style: TextStyle(
+                              color: AppColors.mainColorbutton,
+                              fontSize: 12.h,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        Text(
+                          "Moblie Number",
+                          style: TextStyle(
+                              color: AppColors.mainColorbutton,
+                              fontSize: 12.h,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        Text(
+                          "Email",
+                          style: TextStyle(
+                              color: AppColors.mainColorbutton,
+                              fontSize: 12.h,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        Text(
+                          "Date of Birth",
+                          style: TextStyle(
+                              color: AppColors.mainColorbutton,
+                              fontSize: 12.h,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        Text(
+                          "Address",
+                          style: TextStyle(
+                              color: AppColors.mainColorbutton,
+                              fontSize: 12.h,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ],
                     ),
                     SizedBox(
-                      height: 15.h,
+                      width: 20.w,
                     ),
-                    Text(
-                      "Moblie Number",
-                      style: TextStyle(
-                          color: AppColors.mainColorbutton,
-                          fontSize: 12.h,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    Text(
-                      "Email",
-                      style: TextStyle(
-                          color: AppColors.mainColorbutton,
-                          fontSize: 12.h,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    Text(
-                      "Date of Birth",
-                      style: TextStyle(
-                          color: AppColors.mainColorbutton,
-                          fontSize: 12.h,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    Text(
-                      "Address",
-                      style: TextStyle(
-                          color: AppColors.mainColorbutton,
-                          fontSize: 12.h,
-                          fontWeight: FontWeight.w600),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          customerData['customer_name'].toString() ?? '',
+                          style: TextStyle(
+                              fontSize: 12.h, fontWeight: FontWeight.w500),
+                        ),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        Text(
+                          customerData['mobile'].toString() ?? '',
+                          style: TextStyle(
+                              fontSize: 12.h, fontWeight: FontWeight.w500),
+                        ),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        Text(
+                          customerData['email'].toString() ?? '',
+                          style: TextStyle(
+                              fontSize: 12.h, fontWeight: FontWeight.w500),
+                        ),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        Text(
+                          "25-01-1992",
+                          style: TextStyle(
+                              fontSize: 12.h, fontWeight: FontWeight.w500),
+                        ),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        Text(
+                          "Apartment 1 Durga Park",
+                          textDirection: TextDirection.ltr,
+                          style: TextStyle(
+                              fontSize: 12.h, fontWeight: FontWeight.w500),
+                        )
+                      ],
                     ),
                   ],
                 ),
-                SizedBox(
-                  width: 20.w,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      customerData['customer_name'].toString() ?? '',
-                      style: TextStyle(
-                          fontSize: 12.h, fontWeight: FontWeight.w500),
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    Text(
-                      customerData['mobile'].toString() ?? '',
-                      style: TextStyle(
-                          fontSize: 12.h, fontWeight: FontWeight.w500),
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    Text(
-                      customerData['email'].toString() ?? '',
-                      style: TextStyle(
-                          fontSize: 12.h, fontWeight: FontWeight.w500),
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    Text(
-                      "25-01-1992",
-                      style: TextStyle(
-                          fontSize: 12.h, fontWeight: FontWeight.w500),
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    Text(
-                      "Apartment 1 Durga Park",
-                      textDirection: TextDirection.ltr,
-                      style: TextStyle(
-                          fontSize: 12.h, fontWeight: FontWeight.w500),
-                    )
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 30.h,
-            ),
-            Column(
-              children: [
-                Text(
-                  "Pervious Prescriptions",
-                  style: TextStyle(
-                      fontSize: 15.sp,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.mainColorbutton),
-                ),
-                SizedBox(height: 30),
-                ListView.separated(
-                    shrinkWrap: true,
-                    primary: false,
-                    itemBuilder: (context, index) => Prescription(
-                          date: prescs[index].createdAt?.split("T")[0] ?? '',
-                          name: prescs[index].customerName ?? '',
-                          presc: prescs[index],
-                        ),
-                    separatorBuilder: (context, index) => SizedBox(
-                          height: 10.h,
-                        ),
-                    itemCount: prescs.length),
-              ],
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
-            if (details_status == 'no access')
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 70.w),
-                child: CustomButton(
-                  onPressed: () async {
-                    sendRequest();
-                  },
-                  text: "Request Access",
-                ),
-              ),
-            if (details_status == 'pending')
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 70.w),
-                child: CustomButton(
-                  onPressed: () {},
-                  text: "Pending (Click to Send)",
-                ),
-              ),
-            if (details_status == 'pending')
-              Column(children: [
                 SizedBox(
                   height: 30.h,
                 ),
-                Text(
-                  "Enter the OTP",
-                  style: TextStyle(
-                      fontSize: 15.sp,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.mainColorbutton),
-                ),
-                SizedBox(
-                  height: 10.h,
-                ),
-                Text(
-                  "Sent to the Patient Moblie Number",
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
+                Column(
+                  children: [
+                    Text(
+                      "Pervious Prescriptions",
+                      style: TextStyle(
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.mainColorbutton),
+                    ),
+                    SizedBox(height: 30),
+                    ListView.separated(
+                        shrinkWrap: true,
+                        primary: false,
+                        itemBuilder: (context, index) => Prescription(
+                              date:
+                                  prescs[index].createdAt?.split("T")[0] ?? '',
+                              name: prescs[index].customerName ?? '',
+                              presc: prescs[index],
+                            ),
+                        separatorBuilder: (context, index) => SizedBox(
+                              height: 10.h,
+                            ),
+                        itemCount: prescs.length),
+                  ],
                 ),
                 SizedBox(
                   height: 20.h,
                 ),
-                OtpTextField(
-                  numberOfFields: 6,
-                  borderColor: Color(0xFF512DA8),
-                  //set to true to show as box or false to show as dash
-                  showFieldAsBox: true,
-                  //runs when a code is typed in
-                  onCodeChanged: (String code) {
-                    //handle validation or checks here
-                  },
-                  //runs when every textfield is filled
-                  onSubmit: verifyOtp, // end onSubmit
-                ),
-                SizedBox(
-                  height: 50.h,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 140),
-                  child: CustomButton(
-                    onPressed: () {},
-                    text: 'Submit',
-                    width: 130,
-                    height: 50,
+                if (details_status == 'no access')
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 70.w),
+                    child: CustomButton(
+                      onPressed: () async {
+                        sendRequest();
+                      },
+                      text: "Request Access",
+                    ),
                   ),
-                )
-              ]),
-          ],
+                if (details_status == 'pending')
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 70.w),
+                    child: CustomButton(
+                      onPressed: () async {
+                        sendRequest();
+                      },
+                      text: "Resend OTP",
+                      color: Colors.orange,
+                    ),
+                  ),
+                if (details_status == 'pending')
+                  Column(children: [
+                    SizedBox(
+                      height: 30.h,
+                    ),
+                    Text(
+                      "Enter the OTP",
+                      style: TextStyle(
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.mainColorbutton),
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    Text(
+                      "Sent to the Patient Moblie Number",
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    OtpTextField(
+                      numberOfFields: 6,
+                      borderColor: Color(0xFF512DA8),
+                      //set to true to show as box or false to show as dash
+                      showFieldAsBox: true,
+                      //runs when a code is typed in
+                      onCodeChanged: (String code) {
+                        //handle validation or checks here
+                      },
+                      //runs when every textfield is filled
+                      onSubmit: verifyOtp, // end onSubmit
+                    ),
+                    SizedBox(
+                      height: 50.h,
+                    ),
+                  ]),
+              ],
+            ),
+          ),
         ),
       ),
     );

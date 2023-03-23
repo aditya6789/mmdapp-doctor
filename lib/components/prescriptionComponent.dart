@@ -117,6 +117,7 @@ class PrescriptionComponent extends StatefulWidget {
 class _PrescriptionComponentState extends State<PrescriptionComponent> {
   FToast fToast = FToast();
   TextEditingController queueIdCtl = TextEditingController();
+  TextEditingController selectedController = TextEditingController();
   TextEditingController povCtl = TextEditingController();
   ScrollController scrollController = ScrollController();
 
@@ -140,6 +141,27 @@ class _PrescriptionComponentState extends State<PrescriptionComponent> {
       },
     ],
   ];
+
+  //reset form data
+  void resetForm() {
+    queueIdCtl.text = '';
+    selectedController.text = '';
+    povCtl.text = '';
+    medicineList = [
+      [
+        {
+          "controller": TextEditingController(),
+          "idx": 0,
+        },
+        {
+          "controller": TextEditingController(),
+          "idx": 0,
+        },
+      ],
+    ];
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     void addRow() {
@@ -205,6 +227,7 @@ class _PrescriptionComponentState extends State<PrescriptionComponent> {
       Map resp = await createPrescription(data);
 
       if (resp['success']) {
+        resetForm();
         fToast.showToast(
           child: successToast("Prescription Added Successfully"),
           gravity: ToastGravity.BOTTOM,
@@ -228,68 +251,73 @@ class _PrescriptionComponentState extends State<PrescriptionComponent> {
         body: SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(5),
-        child: Column(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Date",
-                  style:
-                      TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500),
-                ),
-                SizedBox(
-                  height: 10.h,
-                ),
-                TextField(
-                  enabled: false,
-                  controller: TextEditingController(text: "Current Date"),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Customer Name",
-                  style:
-                      TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500),
-                ),
-                SizedBox(
-                  height: 10.h,
-                ),
-                SearchQueue(controller: queueIdCtl)
-              ],
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Reason for Visit",
-                  style:
-                      TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500),
-                ),
-                SizedBox(
-                  height: 10.h,
-                ),
-                CustomTextFormField(
-                  controller: povCtl,
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Date",
+                    style:
+                        TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  TextField(
+                    enabled: false,
+                    controller: TextEditingController(text: "Current Date"),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Customer Name",
+                    style:
+                        TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  SearchQueue(
+                    controller: queueIdCtl,
+                    selectedController: selectedController,
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Reason for Visit",
+                    style:
+                        TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  CustomTextFormField(
+                    controller: povCtl,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              Row(
+                children: [
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
@@ -299,12 +327,10 @@ class _PrescriptionComponentState extends State<PrescriptionComponent> {
                       ),
                     ],
                   ),
-                ),
-                SizedBox(
-                  width: 20.w,
-                ),
-                Expanded(
-                  child: Column(
+                  SizedBox(
+                    width: 20.w,
+                  ),
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
@@ -314,15 +340,13 @@ class _PrescriptionComponentState extends State<PrescriptionComponent> {
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
-            Expanded(
-              child: Container(
-                height: 40.h,
+                ],
+              ),
+              SizedBox(
+                height: 20.h,
+              ),
+              SizedBox(
+                height: 100.h,
                 child: ListView.builder(
                   itemBuilder: (context, idx) {
                     return Column(
@@ -398,23 +422,25 @@ class _PrescriptionComponentState extends State<PrescriptionComponent> {
                   controller: scrollController,
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                children: [
-                  Expanded(
-                      child:
-                          CustomButtonOutline(onPressed: () {}, text: "Reset")),
-                  SizedBox(
-                    width: 30.w,
-                  ),
-                  Expanded(
-                      child: CustomButton(onPressed: buildData, text: "Save"))
-                ],
-              ),
-            )
-          ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    Container(
+                        width: 100.w,
+                        child: CustomButtonOutline(
+                            onPressed: resetForm, text: "Reset")),
+                    SizedBox(
+                      width: 30.w,
+                    ),
+                    Container(
+                        width: 100.w,
+                        child: CustomButton(onPressed: buildData, text: "Save"))
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     ));

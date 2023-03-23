@@ -23,6 +23,7 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
   @override
   void initState() {
     super.initState();
+    fToast.init(context);
     getPrescriptions().then((prescs) {
       prescriptions = prescs;
       setState(() {});

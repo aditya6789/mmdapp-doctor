@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:mmdapp_doctor/common/utils/customButton.dart';
 import 'package:mmdapp_doctor/landing.dart';
+import 'package:mmdapp_doctor/main.dart';
 import 'package:mmdapp_doctor/screens/homeScreen.dart';
 import 'package:mmdapp_doctor/services/auth/authServices.dart';
 import 'package:mmdapp_doctor/utils/customToasts.dart';
@@ -30,7 +31,7 @@ class _OtpState extends State<Otp> {
   @override
   void initState() {
     super.initState();
-    ftoast.init(context);
+    ftoast.init(navigatorKey.currentContext!);
   }
 
   void handleSubmit(context) async {
